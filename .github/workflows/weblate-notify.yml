@@ -14,5 +14,5 @@ jobs:
         run: |
           curl -s --fail -X POST \
             -H "Authorization: Token ${{ secrets.WEBLATE_API_TOKEN }}" \
-            "https://hosted.weblate.org/api/components/dynamic-weaher-card/<COMPONENT_SLUG>/repository/" \
+            "https://hosted.weblate.org/api/components/dynamic-weaher-card/main/repository/" \
             -d "operation=pull"
