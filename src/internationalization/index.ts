@@ -1,12 +1,12 @@
-import ru from './locales/ru/translation';
-import de from './locales/de/translation';
-import nl from './locales/nl/translation';
-import fr from './locales/fr/translation';
-import en from './locales/en/translation';
-import es from './locales/es/translation';
-import it from './locales/it/translation';
-import sk from './locales/sk/translation';
-import hu from './locales/hu/translation';
+import ru from './locales/ru/translation.json';
+import de from './locales/de/translation.json';
+import nl from './locales/nl/translation.json';
+import fr from './locales/fr/translation.json';
+import en from './locales/en/translation.json';
+import es from './locales/es/translation.json';
+import it from './locales/it/translation.json';
+import sk from './locales/sk/translation.json';
+import hu from './locales/hu/translation.json';
 import type { Translation, SupportedLanguage } from './types';
 
 const translations: Record<SupportedLanguage, Translation> = {

@@ -1,0 +1,18 @@
+name: Notify Weblate
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'src/internationalization/locales/en/translation.json'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Weblate of source update
+        run: |
+          curl -s --fail -X POST \
+            -H "Authorization: Token ${{ secrets.WEBLATE_API_TOKEN }}" \
+            "https://hosted.weblate.org/api/components/dynamic-weaher-card/<COMPONENT_SLUG>/repository/" \
+            -d "operation=pull"
