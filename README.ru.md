@@ -10,6 +10,7 @@
 
 [![Звёзды](https://img.shields.io/github/stars/teuchezh/dynamic-weather-card?style=social)](https://github.com/teuchezh/dynamic-weather-card/stargazers)
 [![Вопросы](https://img.shields.io/github/issues/teuchezh/dynamic-weather-card?style=social&logo=github)](https://github.com/teuchezh/dynamic-weather-card/issues)
+[![Статус переводов](https://hosted.weblate.org/widget/dynamic-weaher-card/-/svg-badge.svg)](https://hosted.weblate.org/engage/dynamic-weaher-card/)
 
 [English](README.md) | **Русский**
 
@@ -251,7 +252,7 @@ show_humidity: true
 | Español | `es` | ✅ Полный |
 | Italiano | `it` | ✅ Полный |
 
-Хотите добавить свой язык? [Внесите вклад здесь!](https://github.com/teuchezh/dynamic-weather-card/tree/main/src/internationalization/locales)
+Хотите добавить или улучшить перевод? Помогите через **[Weblate](https://hosted.weblate.org/engage/dynamic-weaher-card/)** — без написания кода!
 
 ---
 

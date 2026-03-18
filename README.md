@@ -10,6 +10,7 @@
 
 [![Stars](https://img.shields.io/github/stars/teuchezh/dynamic-weather-card?style=social)](https://github.com/teuchezh/dynamic-weather-card/stargazers)
 [![Issues](https://img.shields.io/github/issues/teuchezh/dynamic-weather-card?style=social&logo=github)](https://github.com/teuchezh/dynamic-weather-card/issues)
+[![Translation status](https://hosted.weblate.org/widget/dynamic-weaher-card/-/svg-badge.svg)](https://hosted.weblate.org/engage/dynamic-weaher-card/)
 
 **[English](#)** | [Русский](README.ru.md)
 
@@ -253,7 +254,7 @@ The card automatically detects your Home Assistant language or you can set it ma
 | Magyar | `hu` | ✅ Complete |
 | Slovenčina | `sk` | ✅ Complete |
 
-Want to add your language? [Contribute here!](https://github.com/teuchezh/dynamic-weather-card/tree/main/src/internationalization/locales)
+Want to add or improve a translation? Contribute via **[Weblate](https://hosted.weblate.org/engage/dynamic-weaher-card/)** — no coding required!
 
 ---
 
