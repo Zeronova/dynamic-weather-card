@@ -57,6 +57,8 @@ const translation: Translation = {
     'clock_format': 'Óra formátum',
     'clock_format_12h': '12 órás (DE/DU)',
     'clock_format_24h': '24 órás',
+    'clock_size': 'Clock Size',
+    'show_date': 'Show Date',
     'overlay_opacity': 'Fedőréteg átlátszóság',
     'language': 'Nyelv',
     'language_auto': 'Automatikus',

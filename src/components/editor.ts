@@ -35,6 +35,8 @@ export class DynamicWeatherCardEditor extends LitElement {
       show_clock: DEFAULT_CONFIG.showClock,
       clock_position: DEFAULT_CONFIG.clockPosition,
       clock_format: DEFAULT_CONFIG.clockFormat,
+      clock_size: DEFAULT_CONFIG.clockSize,
+      show_date: DEFAULT_CONFIG.showDate,
       overlay_opacity: DEFAULT_CONFIG.overlayOpacity,
       language: DEFAULT_CONFIG.language,
       wind_speed_unit: DEFAULT_CONFIG.windSpeedUnit,
@@ -96,6 +98,8 @@ export class DynamicWeatherCardEditor extends LitElement {
           }
         }
       },
+      { name: 'clock_size', selector: { number: { min: 16, max: 120, step: 2, mode: 'box' } } },
+      { name: 'show_date', selector: { boolean: {} } },
       { name: 'overlay_opacity', selector: { number: { min: 0, max: 1, step: 0.05, mode: 'box' } } },
       {
         name: 'language',

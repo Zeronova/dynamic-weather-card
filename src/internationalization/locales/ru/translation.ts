@@ -57,6 +57,8 @@ const translation: Translation = {
     'clock_format': 'Формат времени',
     'clock_format_12h': '12-часовой (AM/PM)',
     'clock_format_24h': '24-часовой',
+    'clock_size': 'Clock Size',
+    'show_date': 'Show Date',
     'overlay_opacity': 'Прозрачность подложки',
     'language': 'Язык',
     'language_auto': 'Авто',

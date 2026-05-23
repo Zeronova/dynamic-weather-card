@@ -1,91 +1,94 @@
-import { LitElement, html, css, TemplateResult } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { formatClockTime } from '../utils.js';
-import { i18n } from '../internationalization';
+import { formatClockTime } from '../utils';
+import type { HomeAssistant } from '../types';
+import type { SupportedLanguage } from '../internationalization/types';
 
-export class WeatherClock extends LitElement {
-  @property({ type: String }) format: '12h' | '24h' | null = null;
-  @state() private currentTime: string = '';
+export class WeatherClock extends HTMLElement {
+  private _hass?: HomeAssistant;
+  private _locale: SupportedLanguage = 'en';
+  private _format: '12h' | '24h' = '24h';
+  private _size = 48;
+  private _showDate = false;
+  private _timeInterval?: number;
 
-  private clockInterval: number | null = null;
+  set hass(hass: HomeAssistant) {
+    this._hass = hass;
+  }
 
-  static styles = css`
-    :host {
-      display: block;
-    }
+  set locale(locale: SupportedLanguage) {
+    this._locale = locale;
+  }
 
-    :host([hidden]) {
-      display: none;
-    }
+  set format(format: '12h' | '24h') {
+    this._format = format;
+  }
 
-    .clock {
-      margin-top: 0;
-      margin-bottom: 0;
-      font-size: 48px;
-      font-weight: 200;
-      line-height: 1;
-      color: white;
-      text-align: right;
-      text-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.4),
-        0 2px 6px rgba(0, 0, 0, 0.3),
-        0 4px 12px rgba(0, 0, 0, 0.2);
-      z-index: 2;
-      pointer-events: none;
-    }
+  set size(size: number) {
+    this._size = size;
+  }
 
-    @media (max-width: 600px) {
-      .clock {
-        font-size: 36px;
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-  `;
+  set showDate(show: boolean) {
+    this._showDate = show;
+  }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-    if (this.format) {
-      this.updateTime();
-      this.clockInterval = window.setInterval(() => this.updateTime(), 1000);
+  connectedCallback() {
+    this._startClock();
+    this._render();
+  }
+
+  disconnectedCallback() {
+    this._stopClock();
+  }
+
+  private _startClock() {
+    this._stopClock();
+    this._timeInterval = window.setInterval(() => this._render(), 1000);
+  }
+
+  private _stopClock() {
+    if (this._timeInterval !== undefined) {
+      clearInterval(this._timeInterval);
+      this._timeInterval = undefined;
     }
   }
 
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    if (this.clockInterval) {
-      clearInterval(this.clockInterval);
-      this.clockInterval = null;
-    }
+  private _getDateString(date: Date): string {
+    return date.toLocaleDateString(this._locale, {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    });
   }
 
-  updated(changedProperties: Map<string, unknown>): void {
-    super.updated(changedProperties);
-    if (changedProperties.has('format')) {
-      if (this.clockInterval) {
-        clearInterval(this.clockInterval);
-        this.clockInterval = null;
-      }
-      if (this.format) {
-        this.updateTime();
-        this.clockInterval = window.setInterval(() => this.updateTime(), 1000);
-      }
-    }
-  }
+  private _render() {
+    const now = new Date();
+    const time = formatClockTime(now, this._format, 'AM', 'PM');
 
-  private updateTime(): void {
-    if (!this.format) return;
-    this.currentTime = formatClockTime(
-      new Date(),
-      this.format,
-      i18n.t('am'),
-      i18n.t('pm')
-    );
-  }
-
-  render(): TemplateResult {
-    if (!this.format) return html``;
-    return html`<div class="clock">${this.currentTime}</div>`;
+    this.innerHTML = `
+      <style>
+        .clock-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+        }
+        .clock-time {
+          font-size: ${this._size}px;
+          font-weight: 300;
+          line-height: 1;
+          color: var(--primary-text-color, #fff);
+        }
+        .clock-date {
+          font-size: ${Math.max(this._size * 0.35, 12)}px;
+          font-weight: 300;
+          color: var(--secondary-text-color, rgba(255,255,255,0.7));
+          white-space: nowrap;
+        }
+      </style>
+      <div class="clock-container">
+        <div class="clock-time">${time}</div>
+        ${this._showDate ? `<div class="clock-date">${this._getDateString(now)}</div>` : ''}
+      </div>
+    `;
   }
 }
 

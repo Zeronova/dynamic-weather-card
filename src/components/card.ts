@@ -174,6 +174,8 @@ export class AnimatedWeatherCard extends LitElement {
       showClock: config.show_clock === true,
       clockPosition: config.clock_position || DEFAULT_CONFIG.clockPosition,
       clockFormat: config.clock_format || DEFAULT_CONFIG.clockFormat,
+      clockSize: config.clock_size ?? DEFAULT_CONFIG.clockSize,
+      showDate: config.show_date === true,
       overlayOpacity: config.overlay_opacity !== undefined ? config.overlay_opacity : DEFAULT_CONFIG.overlayOpacity,
       language: config.language || DEFAULT_CONFIG.language,
       windSpeedUnit: config.wind_speed_unit || DEFAULT_CONFIG.windSpeedUnit,
@@ -281,6 +283,9 @@ export class AnimatedWeatherCard extends LitElement {
               </div>
               <weather-clock
                 .format=${this.config.showClock && this.config.clockPosition === 'top' ? this.config.clockFormat : null}
+                .size=${this.config.showClock && this.config.clockPosition === 'top' ? (this.config.clockSize ?? 48) : null}
+                .showDate=${this.config.showClock && this.config.clockPosition === 'top' ? (this.config.showDate ?? false) : null}
+                .locale=${i18n.lang}
               ></weather-clock>
             </div>
             <div class="details ${this.config.showClock && this.config.clockPosition === 'details' ? 'details--clock' : ''}">
@@ -292,6 +297,9 @@ export class AnimatedWeatherCard extends LitElement {
               ></weather-details>
               <weather-clock
                 .format=${this.config.showClock && this.config.clockPosition === 'details' ? this.config.clockFormat : null}
+                .size=${this.config.showClock && this.config.clockPosition === 'details' ? (this.config.clockSize ?? 48) : null}
+                .showDate=${this.config.showClock && this.config.clockPosition === 'details' ? (this.config.showDate ?? false) : null}
+                .locale=${i18n.lang}
               ></weather-clock>
             </div>
             <hourly-forecast

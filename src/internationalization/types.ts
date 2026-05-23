@@ -105,6 +105,8 @@ export interface EditorTranslations {
   clock_format: string;
   clock_format_12h: string;
   clock_format_24h: string;
+  clock_size: string;
+  show_date: string;
   overlay_opacity: string;
   language: string;
   language_auto: string;

@@ -57,6 +57,8 @@ const translation: Translation = {
     'clock_format': 'Tijdformaat',
     'clock_format_12h': '12-uurs (AM/PM)',
     'clock_format_24h': '24-uurs',
+    'clock_size': 'Clock Size',
+    'show_date': 'Show Date',
     'overlay_opacity': 'Overlay-doorzichtigheid',
     'language': 'Taal',
     'language_auto': 'Automatisch',

@@ -38,6 +38,8 @@ export const DEFAULT_CONFIG: Required<Omit<WeatherCardConfig, 'entity' | 'type'>
   showClock: false,
   clockPosition: 'top',
   clockFormat: '24h',
+  clockSize: 48,
+  showDate: false,
   overlayOpacity: 0.1,
   language: 'auto',
   height: null,
