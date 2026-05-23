@@ -173,7 +173,7 @@ export class AnimatedWeatherCard extends LitElement {
       if (!stateObj) return null;
       return {
         state: stateObj.state,
-        name: ce.name || ce.entity
+        name: ce.name || stateObj.attributes.friendly_name || ce.entity
       };
     }).filter((e): e is { state: string; name: string } => e !== null);
   }

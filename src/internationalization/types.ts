@@ -111,11 +111,8 @@ export interface EditorTranslations {
   font_size: string;
   show_seconds: string;
   custom_entity_1: string;
-  custom_entity_1_name: string;
   custom_entity_2: string;
-  custom_entity_2_name: string;
   custom_entity_3: string;
-  custom_entity_3_name: string;
   time_background: string;
   time_background_description: string;
   language: string;
