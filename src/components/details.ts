@@ -198,6 +198,16 @@ export class WeatherDetails extends LitElement {
     `;
   }
 
+  private renderIcon(icon: string | null): TemplateResult {
+    if (!icon) return getSVGIcon('humidity') as TemplateResult;
+    if (icon.startsWith('mdi:')) {
+      return html`<ha-icon icon="${icon}"></ha-icon>`;
+    }
+    const svg = getSVGIcon(icon);
+    if (typeof svg !== 'string') return svg;
+    return getSVGIcon('humidity') as TemplateResult;
+  }
+
   private renderDetailEntity(): TemplateResult {
     if (!this.config?.detailEntity || !this.hass) return html``;
 
@@ -210,7 +220,7 @@ export class WeatherDetails extends LitElement {
 
     return html`
       <div class="info-item">
-        <span class="info-icon">${getSVGIcon('humidity')}</span>
+        <span class="info-icon">${this.renderIcon(this.config.detailEntityIcon)}</span>
         <span>${value}${unit ? ' ' + unit : ''}</span>
       </div>
     `;
@@ -228,7 +238,7 @@ export class WeatherDetails extends LitElement {
 
     return html`
       <div class="info-item">
-        <span class="info-icon">${getSVGIcon('humidity')}</span>
+        <span class="info-icon">${this.renderIcon(this.config.detailEntity2Icon)}</span>
         <span>${value}${unit ? ' ' + unit : ''}</span>
       </div>
     `;

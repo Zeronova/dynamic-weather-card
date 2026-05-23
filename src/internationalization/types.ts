@@ -111,6 +111,10 @@ export interface EditorTranslations {
   clock_format_24h: string;
   clock_size: string;
   show_date: string;
+  forecast_layout: string;
+  forecast_layout_horizontal: string;
+  forecast_layout_vertical: string;
+  forecast_layout_original: string;
   overlay_opacity: string;
   font_size: string;
   show_seconds: string;

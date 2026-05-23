@@ -22,8 +22,11 @@ export class DynamicWeatherCardEditor extends LitElement {
     const flat: Record<string, string> = {};
     const entities = (config as Record<string, unknown>).custom_entities || (config as Record<string, unknown>).customEntities || [];
     if (Array.isArray(entities)) {
-      (entities as Array<{ entity: string }>).forEach((e, i) => {
-        if (i < 3 && e?.entity) flat[`custom_entity_${i + 1}`] = e.entity;
+      (entities as Array<{ entity: string; name?: string }>).forEach((e, i) => {
+        if (i < 3 && e?.entity) {
+          flat[`custom_entity_${i + 1}`] = e.entity;
+          if (e.name) flat[`custom_entity_name_${i + 1}`] = e.name;
+        }
       });
     }
     // Handle camelCase forecastLayout fallback
@@ -31,6 +34,12 @@ export class DynamicWeatherCardEditor extends LitElement {
     if (!cfg.forecast_layout && cfg.forecastLayout) {
       flat.forecast_layout = cfg.forecastLayout as string;
     }
+
+    // Extract detail entity icons
+    const detailEntityIcon = (config as Record<string, unknown>).detail_entity_icon || (config as Record<string, unknown>).detailEntityIcon;
+    if (detailEntityIcon) flat.detail_entity_icon = detailEntityIcon as string;
+    const detailEntity2Icon = (config as Record<string, unknown>).detail_entity_2_icon || (config as Record<string, unknown>).detailEntity2Icon;
+    if (detailEntity2Icon) flat.detail_entity_2_icon = detailEntity2Icon as string;
 
     this._config = {
       name: '',
@@ -62,10 +71,15 @@ export class DynamicWeatherCardEditor extends LitElement {
       sunset_entity: '',
       precipitation_entity: '',
       custom_entity_1: '',
+      custom_entity_1_name: '',
       custom_entity_2: '',
+      custom_entity_2_name: '',
       custom_entity_3: '',
+      custom_entity_3_name: '',
       detail_entity: '',
       detail_entity_2: '',
+      detail_entity_icon: '',
+      detail_entity_2_icon: '',
       ...config,
       ...flat
     };
@@ -135,7 +149,8 @@ export class DynamicWeatherCardEditor extends LitElement {
           select: {
             options: [
               { label: i18n.t('editor.forecast_layout_horizontal'), value: 'horizontal' },
-              { label: i18n.t('editor.forecast_layout_vertical'), value: 'vertical' }
+              { label: i18n.t('editor.forecast_layout_vertical'), value: 'vertical' },
+              { label: i18n.t('editor.forecast_layout_original'), value: 'original' }
             ]
           }
         }
@@ -143,10 +158,15 @@ export class DynamicWeatherCardEditor extends LitElement {
       { name: 'overlay_opacity', selector: { number: { min: 0, max: 1, step: 0.05, mode: 'box' } } },
       { name: 'font_size', selector: { number: { min: 8, max: 30, step: 1, mode: 'box' } } },
       { name: 'custom_entity_1', selector: { entity: { domain: 'sensor' } } },
+      { name: 'custom_entity_1_name', selector: { text: {} } },
       { name: 'custom_entity_2', selector: { entity: { domain: 'sensor' } } },
+      { name: 'custom_entity_2_name', selector: { text: {} } },
       { name: 'custom_entity_3', selector: { entity: { domain: 'sensor' } } },
+      { name: 'custom_entity_3_name', selector: { text: {} } },
       { name: 'detail_entity', selector: { entity: {} } },
+      { name: 'detail_entity_icon', selector: { icon_picker: {} } },
       { name: 'detail_entity_2', selector: { entity: {} } },
+      { name: 'detail_entity_2_icon', selector: { icon_picker: {} } },
       {
         name: 'language',
         selector: {
@@ -191,16 +211,26 @@ export class DynamicWeatherCardEditor extends LitElement {
     if (!value) return;
 
     // Convert flat custom_entity_N fields to custom_entities array
-    const entities: Array<{ entity: string }> = [];
+    const entities: Array<{ entity: string; name?: string }> = [];
     for (let i = 1; i <= 3; i++) {
       const entityKey = `custom_entity_${i}`;
+      const nameKey = `custom_entity_${i}_name`;
       if (value[entityKey]) {
-        entities.push({ entity: value[entityKey] });
+        entities.push({ entity: value[entityKey], name: value[nameKey] || undefined });
       }
       delete value[entityKey];
+      delete value[nameKey];
     }
     if (entities.length) {
       value.custom_entities = entities;
+    }
+
+    // Convert flat detail_entity_icon fields
+    if (value.detail_entity_icon) {
+      value.detail_entity_icon = value.detail_entity_icon;
+    }
+    if (value.detail_entity_2_icon) {
+      value.detail_entity_2_icon = value.detail_entity_2_icon;
     }
 
     this._config = value;

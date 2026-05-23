@@ -30,6 +30,7 @@ export const forecastStyles = css`
     margin-bottom: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-align: center;
   }
 
   .forecast-scroll {

@@ -150,6 +150,8 @@ export class AnimatedWeatherCard extends LitElement {
       windSpeedUnit: this.config.windSpeedUnit ?? 'ms',
       detailEntity: this.config.detailEntity || null,
       detailEntity2: this.config.detailEntity2 || null,
+      detailEntityIcon: this.config.detailEntityIcon || null,
+      detailEntity2Icon: this.config.detailEntity2Icon || null,
       precipitationEntity: this.config.precipitationEntity || null
     };
   }
@@ -223,6 +225,8 @@ export class AnimatedWeatherCard extends LitElement {
       templowAttribute: config.templow_attribute || null,
       detailEntity: config.detail_entity || '',
       detailEntity2: config.detail_entity_2 || '',
+      detailEntityIcon: config.detail_entity_icon || (config as any).detailEntityIcon || '',
+      detailEntity2Icon: config.detail_entity_2_icon || (config as any).detailEntity2Icon || '',
       precipitationEntity: config.precipitation_entity || '',
       tapAction: config.tap_action || { action: 'more-info' },
       holdAction: config.hold_action || { action: 'none' },
@@ -368,37 +372,50 @@ export class AnimatedWeatherCard extends LitElement {
               ` : ''}
             </div>
             ${this.config.showHourlyForecast && this.config.showDailyForecast ? html`
-              <div class="forecast-row">
-                <div class="forecast-left">
-                  <hourly-forecast
-                    .forecast=${hourlyForecast}
-                    .clockFormat=${this.config.clockFormat ?? '24h'}
-                    .layout=${this.config.forecastLayout ?? 'horizontal'}
-                    .compact=${true}
-                  ></hourly-forecast>
+              ${this.config.forecastLayout === 'original' ? html`
+                <hourly-forecast
+                  .forecast=${hourlyForecast}
+                  .clockFormat=${this.config.clockFormat ?? '24h'}
+                  .layout="horizontal"
+                ></hourly-forecast>
+                <daily-forecast
+                  .forecast=${dailyForecast}
+                  .lang=${i18n.lang}
+                  .layout="horizontal"
+                ></daily-forecast>
+              ` : html`
+                <div class="forecast-row">
+                  <div class="forecast-left">
+                    <hourly-forecast
+                      .forecast=${hourlyForecast}
+                      .clockFormat=${this.config.clockFormat ?? '24h'}
+                      .layout=${this.config.forecastLayout ?? 'horizontal'}
+                      .compact=${true}
+                    ></hourly-forecast>
+                  </div>
+                  <div class="forecast-right">
+                    <daily-forecast
+                      .forecast=${dailyForecast}
+                      .lang=${i18n.lang}
+                      .layout=${this.config.forecastLayout ?? 'horizontal'}
+                      .compact=${true}
+                    ></daily-forecast>
+                  </div>
                 </div>
-                <div class="forecast-right">
-                  <daily-forecast
-                    .forecast=${dailyForecast}
-                    .lang=${i18n.lang}
-                    .layout=${this.config.forecastLayout ?? 'horizontal'}
-                    .compact=${true}
-                  ></daily-forecast>
-                </div>
-              </div>
+              `}
             ` : ''}
             ${this.config.showHourlyForecast && !this.config.showDailyForecast ? html`
               <hourly-forecast
                 .forecast=${hourlyForecast}
                 .clockFormat=${this.config.clockFormat ?? '24h'}
-                .layout=${this.config.forecastLayout ?? 'horizontal'}
+                .layout=${this.config.forecastLayout === 'original' ? 'horizontal' : (this.config.forecastLayout ?? 'horizontal')}
               ></hourly-forecast>
             ` : ''}
             ${!this.config.showHourlyForecast && this.config.showDailyForecast ? html`
               <daily-forecast
                 .forecast=${dailyForecast}
                 .lang=${i18n.lang}
-                .layout=${this.config.forecastLayout ?? 'horizontal'}
+                .layout=${this.config.forecastLayout === 'original' ? 'horizontal' : (this.config.forecastLayout ?? 'horizontal')}
               ></daily-forecast>
             ` : ''}
           </div>

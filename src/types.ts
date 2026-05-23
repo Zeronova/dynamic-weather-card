@@ -107,6 +107,12 @@ export interface HomeAssistant {
   };
 }
 
+// Custom Entity
+export interface CustomEntity {
+  entity: string;
+  name?: string;
+}
+
 // Weather Card Configuration
 export interface WeatherCardConfig {
   type: string;
@@ -132,13 +138,15 @@ export interface WeatherCardConfig {
   clockSize?: number;
   showDate?: boolean;
   showSeconds?: boolean;
-  forecastLayout?: 'horizontal' | 'vertical';
+  forecastLayout?: 'horizontal' | 'vertical' | 'original';
   overlayOpacity?: number;
   fontSize?: number;
   timeBackground?: TimeBackgroundSegment[];
-  customEntities?: Array<{ entity: string; name?: string }>;
+  customEntities?: CustomEntity[];
   detailEntity?: string;
   detailEntity2?: string;
+  detailEntityIcon?: string;
+  detailEntity2Icon?: string;
   precipitationEntity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
@@ -249,9 +257,11 @@ export interface ConfigInput {
   overlay_opacity?: number;
   font_size?: number;
   time_background?: TimeBackgroundSegment[];
-  custom_entities?: Array<{ entity: string; name?: string }>;
+  custom_entities?: CustomEntity[];
   detail_entity?: string;
   detail_entity_2?: string;
+  detail_entity_icon?: string;
+  detail_entity_2_icon?: string;
   precipitation_entity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
@@ -272,6 +282,8 @@ export interface WeatherCardConfigInternal extends WeatherCardConfig {
   templowAttribute?: string | null;
   detailEntity?: string;
   detailEntity2?: string;
+  detailEntityIcon?: string;
+  detailEntity2Icon?: string;
   precipitationEntity?: string;
   tapAction?: ActionConfig;
   holdAction?: ActionConfig;
@@ -291,6 +303,8 @@ export interface DetailsConfig {
   windSpeedUnit: 'ms' | 'kmh';
   detailEntity: string | null;
   detailEntity2: string | null;
+  detailEntityIcon: string | null;
+  detailEntity2Icon: string | null;
   precipitationEntity: string | null;
 }
 

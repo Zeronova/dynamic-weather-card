@@ -53,6 +53,8 @@ export const DEFAULT_CONFIG: Required<Omit<WeatherCardConfig, 'entity' | 'type'>
   customEntities: [],
   detailEntity: '',
   detailEntity2: '',
+  detailEntityIcon: '',
+  detailEntity2Icon: '',
   precipitationEntity: '',
   timeBackground: []
 };

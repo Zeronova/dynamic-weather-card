@@ -69,6 +69,7 @@ const translation: Translation = {
     'forecast_layout': 'Forecast Layout',
     'forecast_layout_horizontal': 'Side by side (horizontal)',
     'forecast_layout_vertical': 'Stacked (vertical)',
+    'forecast_layout_original': 'Original (stacked with borders)',
     'custom_entity_1': 'Custom Entity 1',
     'custom_entity_2': 'Custom Entity 2',
     'custom_entity_3': 'Custom Entity 3',
