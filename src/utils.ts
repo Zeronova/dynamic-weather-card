@@ -1,5 +1,5 @@
 import { TIME_THRESHOLDS } from './constants';
-import type { TimeOfDay, Position, BackgroundGradient, SunMoonData, HassEntity, HomeAssistant } from './types';
+import type { TimeOfDay, Position, BackgroundGradient, SunMoonData, HassEntity, HomeAssistant, TimeBackgroundSegment } from './types';
 
 /**
  * Determine time of day and its progress (internal fallback)
@@ -105,6 +105,78 @@ export function getBackgroundGradient(timeOfDay: TimeOfDay): BackgroundGradient 
       }
     };
   }
+  return null;
+}
+
+/**
+ * Parse a CSS color string to RGBColor.
+ * Supports hex (#RRGGBB) and rgb() formats.
+ */
+function parseColor(color: string): RGBColor | null {
+  // Hex (#RRGGBB)
+  const hexMatch = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+  if (hexMatch) {
+    return {
+      r: parseInt(hexMatch[1], 16),
+      g: parseInt(hexMatch[2], 16),
+      b: parseInt(hexMatch[3], 16)
+    };
+  }
+  // rgb(r, g, b)
+  const rgbMatch = color.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+  if (rgbMatch) {
+    return {
+      r: parseInt(rgbMatch[1]),
+      g: parseInt(rgbMatch[2]),
+      b: parseInt(rgbMatch[3])
+    };
+  }
+  return null;
+}
+
+/**
+ * Convert "HH:MM" string to minutes since midnight.
+ */
+function timeToMinutes(time: string): number | null {
+  const match = time.match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return null;
+  return parseInt(match[1]) * 60 + parseInt(match[2]);
+}
+
+/**
+ * Get the active custom background segment for the current time.
+ * Returns null if no segments match or none are configured.
+ */
+export function getCustomBackgroundGradient(segments: TimeBackgroundSegment[]): BackgroundGradient | null {
+  if (!segments || segments.length === 0) return null;
+
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  // Find active segment
+  for (const segment of segments) {
+    const fromMinutes = timeToMinutes(segment.from);
+    const toMinutes = timeToMinutes(segment.to);
+    if (fromMinutes === null || toMinutes === null) continue;
+
+    let active = false;
+    if (fromMinutes <= toMinutes) {
+      // Normal range (e.g., 06:00 to 18:00)
+      active = currentMinutes >= fromMinutes && currentMinutes < toMinutes;
+    } else {
+      // Wrapping range (e.g., 21:00 to 06:00 — crosses midnight)
+      active = currentMinutes >= fromMinutes || currentMinutes < toMinutes;
+    }
+
+    if (active) {
+      const start = parseColor(segment.start_color);
+      const end = parseColor(segment.end_color);
+      if (start && end) {
+        return { start, end };
+      }
+    }
+  }
+
   return null;
 }
 

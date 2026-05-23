@@ -60,6 +60,8 @@ const translation: Translation = {
     'clock_size': 'Clock Size',
     'show_date': 'Show Date',
     'overlay_opacity': 'Fedőréteg átlátszóság',
+    'time_background': 'Time Background',
+    'time_background_description': 'Configure time-based background colors in YAML (time_background).',
     'language': 'Nyelv',
     'language_auto': 'Automatikus',
     'language_en': 'Angol',

@@ -127,6 +127,7 @@ export interface WeatherCardConfig {
   clockSize?: number;
   showDate?: boolean;
   overlayOpacity?: number;
+  timeBackground?: TimeBackgroundSegment[];
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
   windSpeedUnit?: 'ms' | 'kmh';
@@ -155,6 +156,14 @@ export interface RGBColor {
 export interface BackgroundGradient {
   start: RGBColor;
   end: RGBColor;
+}
+
+// Time Background Segment
+export interface TimeBackgroundSegment {
+  from: string;
+  to: string;
+  start_color: string;
+  end_color: string;
 }
 
 // Sun/Moon Data
@@ -221,6 +230,7 @@ export interface ConfigInput {
   clock_size?: number;
   show_date?: boolean;
   overlay_opacity?: number;
+  time_background?: TimeBackgroundSegment[];
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
   sunrise_entity?: string;

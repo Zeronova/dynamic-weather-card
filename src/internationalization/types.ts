@@ -108,6 +108,8 @@ export interface EditorTranslations {
   clock_size: string;
   show_date: string;
   overlay_opacity: string;
+  time_background: string;
+  time_background_description: string;
   language: string;
   language_auto: string;
   language_en: string;

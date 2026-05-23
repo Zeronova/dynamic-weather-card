@@ -6,7 +6,8 @@ import { resolveLanguage } from '../internationalization/resolveLanguage.js';
 import {
   getBackgroundGradient,
   getSunriseSunsetData,
-  getTimeOfDayWithSunData
+  getTimeOfDayWithSunData,
+  getCustomBackgroundGradient
 } from '../utils.js';
 import { cardStyles } from './styles.js';
 import { AnimationManager } from './animation-manager.js';
@@ -184,7 +185,8 @@ export class AnimatedWeatherCard extends LitElement {
       templowAttribute: config.templow_attribute || null,
       tapAction: config.tap_action || { action: 'more-info' },
       holdAction: config.hold_action || { action: 'none' },
-      doubleTapAction: config.double_tap_action || { action: 'none' }
+      doubleTapAction: config.double_tap_action || { action: 'none' },
+      timeBackground: config.time_background || undefined
     };
 
     if (this.config.language) {
@@ -229,7 +231,9 @@ export class AnimatedWeatherCard extends LitElement {
 
     const minHeight = this.config.height ? `${this.config.height}px` : '200px';
 
-    const bgGradient: BackgroundGradient | null = getBackgroundGradient(timeOfDay);
+    const bgGradient: BackgroundGradient | null = this.config.timeBackground?.length
+      ? getCustomBackgroundGradient(this.config.timeBackground)
+      : getBackgroundGradient(timeOfDay);
     const bgStyle = bgGradient
       ? `background: linear-gradient(135deg, rgb(${bgGradient.start.r}, ${bgGradient.start.g}, ${bgGradient.start.b}), rgb(${bgGradient.end.r}, ${bgGradient.end.g}, ${bgGradient.end.b}));`
       : '';

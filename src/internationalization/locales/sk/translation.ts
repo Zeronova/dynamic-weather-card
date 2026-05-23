@@ -60,6 +60,8 @@ const translation: Translation = {
     'clock_size': 'Clock Size',
     'show_date': 'Show Date',
     'overlay_opacity': 'Priehľadnosť vrstvy',
+    'time_background': 'Time Background',
+    'time_background_description': 'Configure time-based background colors in YAML (time_background).',
     'language': 'Jazyk',
     'language_auto': 'Automaticky',
     'language_en': 'Angličtina',
