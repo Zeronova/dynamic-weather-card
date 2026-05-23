@@ -166,30 +166,29 @@ export const cardStyles = css`
     align-items: flex-start;
   }
 
-  .primary-custom-entities {
+  .ce-names {
     display: flex;
     gap: 24px;
     align-items: flex-end;
   }
 
-  .ce-item {
+  .ce-name {
+    font-size: 20px;
+    font-weight: 400;
+    opacity: 0.9;
+    white-space: nowrap;
+  }
+
+  .ce-values {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 24px;
+    align-items: baseline;
   }
 
   .ce-value {
     font-size: 56px;
     font-weight: 100;
     line-height: 1;
-  }
-
-  .ce-name {
-    font-size: 14px;
-    opacity: 0.8;
-    margin-top: 4px;
-    white-space: nowrap;
   }
 
   .feels-like {

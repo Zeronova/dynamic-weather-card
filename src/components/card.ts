@@ -149,17 +149,25 @@ export class AnimatedWeatherCard extends LitElement {
     };
   }
 
-  private _renderCustomEntities(): TemplateResult | '' {
+  private _renderCustomEntityNames(): TemplateResult | '' {
     const entities = this.getCustomEntityStates();
     if (!entities.length) return '';
-
     return html`
-      <div class="primary-custom-entities">
+      <div class="ce-names">
         ${entities.map(e => html`
-          <div class="ce-item">
-            <div class="ce-value">${e.state}°</div>
-            <div class="ce-name">${e.name}</div>
-          </div>
+          <div class="ce-name">${e.name}</div>
+        `)}
+      </div>
+    `;
+  }
+
+  private _renderCustomEntityValues(): TemplateResult | '' {
+    const entities = this.getCustomEntityStates();
+    if (!entities.length) return '';
+    return html`
+      <div class="ce-values">
+        ${entities.map(e => html`
+          <div class="ce-value">${e.state}°</div>
         `)}
       </div>
     `;
@@ -311,10 +319,13 @@ export class AnimatedWeatherCard extends LitElement {
             ` : ''}
             <div class="primary">
               <div class="primary-left">
-                <div class="condition">${i18n.t(weather.condition)}</div>
+                <div class="primary-row">
+                  <div class="condition">${i18n.t(weather.condition)}</div>
+                  ${this._renderCustomEntityNames()}
+                </div>
                 <div class="primary-row">
                   <div class="temperature">${weather.temperature != null ? Math.round(weather.temperature) + '°' : i18n.t('no_data')}</div>
-                  ${this._renderCustomEntities()}
+                  ${this._renderCustomEntityValues()}
                   <div class="primary-right-items">
                     ${this.config.showClock && this.config.clockPosition === 'top' ? html`
                       <weather-clock
