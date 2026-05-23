@@ -140,12 +140,14 @@ export class AnimatedWeatherCard extends LitElement {
   private getDetailsConfig(): DetailsConfig {
     return {
       showHumidity: this.config.showHumidity ?? true,
+      showPrecipitation: this.config.showPrecipitation ?? false,
       showWind: this.config.showWind ?? true,
       showWindGust: this.config.showWindGust ?? true,
       showWindDirection: this.config.showWindDirection ?? true,
       showSunriseSunset: this.config.showSunriseSunset ?? true,
       clockFormat: this.config.clockFormat ?? '24h',
-      windSpeedUnit: this.config.windSpeedUnit ?? 'ms'
+      windSpeedUnit: this.config.windSpeedUnit ?? 'ms',
+      detailEntity: this.config.detailEntity || null
     };
   }
 
@@ -193,6 +195,7 @@ export class AnimatedWeatherCard extends LitElement {
       showWindGust: config.show_wind_gust !== false,
       showWindDirection: config.show_wind_direction !== false,
       showHumidity: config.show_humidity !== false,
+      showPrecipitation: config.show_precipitation === true,
       showMinTemp: config.show_min_temp !== false,
       showForecast: config.show_forecast === true,
       showHourlyForecast: showHourlyForecast === true,
@@ -213,6 +216,7 @@ export class AnimatedWeatherCard extends LitElement {
       sunriseEntity: config.sunrise_entity || null,
       sunsetEntity: config.sunset_entity || null,
       templowAttribute: config.templow_attribute || null,
+      detailEntity: config.detail_entity || '',
       tapAction: config.tap_action || { action: 'more-info' },
       holdAction: config.hold_action || { action: 'none' },
       doubleTapAction: config.double_tap_action || { action: 'none' },
@@ -339,6 +343,7 @@ export class AnimatedWeatherCard extends LitElement {
             </div>
             <div class="details ${this.config.showClock && this.config.clockPosition === 'details' ? 'details--clock' : ''}">
               <weather-details
+                .hass=${this.hass}
                 .weather=${weather}
                 .sunData=${sunData}
                 .config=${this.getDetailsConfig()}

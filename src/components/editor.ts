@@ -87,6 +87,7 @@ export class DynamicWeatherCardEditor extends LitElement {
       { name: 'show_wind_gust', selector: { boolean: {} } },
       { name: 'show_wind_direction', selector: { boolean: {} } },
       { name: 'show_humidity', selector: { boolean: {} } },
+      { name: 'show_precipitation', selector: { boolean: {} } },
       { name: 'show_min_temp', selector: { boolean: {} } },
       { name: 'show_hourly_forecast', selector: { boolean: {} } },
       { name: 'hourly_forecast_hours', selector: { number: { min: 1, max: 24, step: 1, mode: 'box' } } },
@@ -137,6 +138,7 @@ export class DynamicWeatherCardEditor extends LitElement {
       { name: 'custom_entity_1', selector: { entity: { domain: 'sensor' } } },
       { name: 'custom_entity_2', selector: { entity: { domain: 'sensor' } } },
       { name: 'custom_entity_3', selector: { entity: { domain: 'sensor' } } },
+      { name: 'detail_entity', selector: { entity: {} } },
       {
         name: 'language',
         selector: {

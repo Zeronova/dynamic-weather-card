@@ -35,6 +35,8 @@ export interface WeatherEntityAttributes {
   condition?: string;
   apparent_temperature?: number;
   wind_direction?: string;
+  precipitation?: number;
+  precipitation_unit?: string;
   // Additional attributes for minimum temperature
   templow?: number;
   temperature_low?: number;
@@ -114,6 +116,7 @@ export interface WeatherCardConfig {
   showWindGust?: boolean;
   showWindDirection?: boolean;
   showHumidity?: boolean;
+  showPrecipitation?: boolean;
   showMinTemp?: boolean;
   showForecast?: boolean;
   showHourlyForecast?: boolean;
@@ -132,6 +135,7 @@ export interface WeatherCardConfig {
   fontSize?: number;
   timeBackground?: TimeBackgroundSegment[];
   customEntities?: Array<{ entity: string; name?: string }>;
+  detailEntity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
   windSpeedUnit?: 'ms' | 'kmh';
@@ -189,6 +193,7 @@ export interface WeatherData {
   temperature: number | null;
   apparentTemperature: number | null;
   humidity: number | null;
+  precipitation: number | null;
   windSpeed: number | null;
   windGust: number | null;
   windBearing: number | null;
@@ -221,6 +226,7 @@ export interface ConfigInput {
   show_wind_gust?: boolean;
   show_wind_direction?: boolean;
   show_humidity?: boolean;
+  show_precipitation?: boolean;
   show_min_temp?: boolean;
   show_forecast?: boolean;
   show_hourly_forecast?: boolean;
@@ -238,6 +244,7 @@ export interface ConfigInput {
   font_size?: number;
   time_background?: TimeBackgroundSegment[];
   custom_entities?: Array<{ entity: string; name?: string }>;
+  detail_entity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
   sunrise_entity?: string;
@@ -255,6 +262,7 @@ export interface WeatherCardConfigInternal extends WeatherCardConfig {
   sunriseEntity?: string | null;
   sunsetEntity?: string | null;
   templowAttribute?: string | null;
+  detailEntity?: string;
   tapAction?: ActionConfig;
   holdAction?: ActionConfig;
   doubleTapAction?: ActionConfig;
@@ -263,12 +271,14 @@ export interface WeatherCardConfigInternal extends WeatherCardConfig {
 // Details Component Configuration
 export interface DetailsConfig {
   showHumidity: boolean;
+  showPrecipitation: boolean;
   showWind: boolean;
   showWindGust: boolean;
   showWindDirection: boolean;
   showSunriseSunset: boolean;
   clockFormat: '12h' | '24h';
   windSpeedUnit: 'ms' | 'kmh';
+  detailEntity: string | null;
 }
 
 // Custom Card Registration

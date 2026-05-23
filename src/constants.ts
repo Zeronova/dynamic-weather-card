@@ -28,6 +28,7 @@ export const DEFAULT_CONFIG: Required<Omit<WeatherCardConfig, 'entity' | 'type'>
   showWindGust: false,
   showWindDirection: false,
   showHumidity: false,
+  showPrecipitation: false,
   showMinTemp: true,
   showForecast: false,
   showHourlyForecast: false,
@@ -47,5 +48,6 @@ export const DEFAULT_CONFIG: Required<Omit<WeatherCardConfig, 'entity' | 'type'>
   height: null,
   windSpeedUnit: 'ms',
   fontSize: 13,
-  customEntities: []
+  customEntities: [],
+  detailEntity: ''
 };

@@ -11,6 +11,7 @@ export class WeatherDetails extends LitElement {
   @property({ type: Object }) config: DetailsConfig | null = null;
   @property({ type: Object }) entityAttributes: WeatherEntityAttributes | null = null;
   @property({ type: Number }) fontSize: number = 13;
+  @property({ type: Object }) hass: any = null;
 
   static styles = css`
     :host {
@@ -62,9 +63,11 @@ export class WeatherDetails extends LitElement {
 
     return (
       (this.config.showHumidity && this.weather.humidity != null) ||
+      (this.config.showPrecipitation && this.weather.precipitation != null) ||
       (this.config.showWind && this.weather.windSpeed != null) ||
       (this.config.showWindDirection && this.weather.windBearing != null) ||
-      (this.config.showSunriseSunset && this.sunData?.hasSunData === true)
+      (this.config.showSunriseSunset && this.sunData?.hasSunData === true) ||
+      (!!this.config.detailEntity && !!this.hass?.states[this.config.detailEntity])
     );
   }
 
@@ -75,6 +78,21 @@ export class WeatherDetails extends LitElement {
       <div class="info-item">
         <span class="info-icon">${getSVGIcon('humidity')}</span>
         <span>${this.weather.humidity} %</span>
+      </div>
+    `;
+  }
+
+  private renderPrecipitation(): TemplateResult {
+    if (!this.config?.showPrecipitation || this.weather?.precipitation == null) return html``;
+
+    // Get unit from entity attributes or default to mm
+    const attrs = this.entityAttributes || {};
+    const unit = attrs.precipitation_unit || 'mm';
+
+    return html`
+      <div class="info-item">
+        <span class="info-icon">${getSVGIcon('humidity')}</span>
+        <span>${this.weather.precipitation} ${unit}</span>
       </div>
     `;
   }
@@ -145,16 +163,35 @@ export class WeatherDetails extends LitElement {
     `;
   }
 
+  private renderDetailEntity(): TemplateResult {
+    if (!this.config?.detailEntity || !this.hass) return html``;
+
+    const stateObj = this.hass.states[this.config.detailEntity];
+    if (!stateObj) return html``;
+
+    const name = stateObj.attributes?.friendly_name || this.config.detailEntity;
+    const value = stateObj.state;
+
+    return html`
+      <div class="info-item">
+        <span class="info-icon">${getSVGIcon('humidity')}</span>
+        <span>${value}</span>
+      </div>
+    `;
+  }
+
   render(): TemplateResult {
     if (!this.hasContent()) return html``;
 
     return html`
       <div class="info-grid" style="--dw-font-size: ${this.fontSize}px">
         ${this.renderHumidity()}
+        ${this.renderPrecipitation()}
         ${this.renderWind()}
         ${this.renderWindDirection()}
         ${this.renderSunrise()}
         ${this.renderSunset()}
+        ${this.renderDetailEntity()}
       </div>
     `;
   }

@@ -53,6 +53,7 @@ export function getWeatherData(
     temperature: attrs.temperature != null ? attrs.temperature : null,
     apparentTemperature: attrs.apparent_temperature || null,
     humidity: attrs.humidity != null ? attrs.humidity : null,
+    precipitation: attrs.precipitation != null ? attrs.precipitation : null,
     windSpeed: attrs.wind_speed != null ? attrs.wind_speed : null,
     windGust: attrs.wind_gust_speed || attrs.wind_gust || null,
     windBearing: attrs.wind_bearing != null ? attrs.wind_bearing : null,
