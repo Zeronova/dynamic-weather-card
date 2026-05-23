@@ -150,19 +150,26 @@ export const cardStyles = css`
   .primary-left {
     display: flex;
     flex-direction: column;
+    flex: 1;
   }
 
-  .primary-right {
+  .primary-row {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-    flex-shrink: 0;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .primary-right-items {
+    margin-left: auto;
+    display: flex;
+    align-items: flex-start;
   }
 
   .primary-custom-entities {
     display: flex;
-    gap: 20px;
+    gap: 24px;
+    align-items: flex-end;
   }
 
   .ce-item {
