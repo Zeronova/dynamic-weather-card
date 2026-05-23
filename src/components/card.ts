@@ -149,25 +149,16 @@ export class AnimatedWeatherCard extends LitElement {
     };
   }
 
-  private _renderCustomEntityNames(): TemplateResult | '' {
+  private _renderCustomEntities(): TemplateResult | '' {
     const entities = this.getCustomEntityStates();
     if (!entities.length) return '';
     return html`
-      <div class="ce-names">
+      <div class="ce-columns">
         ${entities.map(e => html`
-          <div class="ce-name">${e.name}</div>
-        `)}
-      </div>
-    `;
-  }
-
-  private _renderCustomEntityValues(): TemplateResult | '' {
-    const entities = this.getCustomEntityStates();
-    if (!entities.length) return '';
-    return html`
-      <div class="ce-values">
-        ${entities.map(e => html`
-          <div class="ce-value">${e.state}°</div>
+          <div class="ce-column">
+            <div class="ce-name">${e.name}</div>
+            <div class="ce-value">${e.state}°</div>
+          </div>
         `)}
       </div>
     `;
@@ -318,23 +309,20 @@ export class AnimatedWeatherCard extends LitElement {
               </div>
             ` : ''}
             <div class="primary">
-              <div class="primary-left">
-                <div class="primary-row">
+              <div class="primary-main">
+                <div class="condition-temp-group">
                   <div class="condition">${i18n.t(weather.condition)}</div>
-                  ${this._renderCustomEntityNames()}
-                </div>
-                <div class="primary-row">
                   <div class="temperature">${weather.temperature != null ? Math.round(weather.temperature) + '°' : i18n.t('no_data')}</div>
-                  ${this._renderCustomEntityValues()}
+                  ${this.config.showMinTemp ? html`
+                    <div class="temp-range">
+                      <span class="temp-min">↓ ${weather.templow != null ? `${Math.round(weather.templow)}°` : i18n.t('no_data')}</span>
+                    </div>
+                  ` : ''}
+                  ${this.config.showFeelsLike ? html`
+                    <div class="feels-like">${i18n.t('feels_like')} ${weather.apparentTemperature != null ? `${Math.round(weather.apparentTemperature)}°` : i18n.t('no_data')}</div>
+                  ` : ''}
                 </div>
-                ${this.config.showMinTemp ? html`
-                  <div class="temp-range">
-                    <span class="temp-min">↓ ${weather.templow != null ? `${Math.round(weather.templow)}°` : i18n.t('no_data')}</span>
-                  </div>
-                ` : ''}
-                ${this.config.showFeelsLike ? html`
-                  <div class="feels-like">${i18n.t('feels_like')} ${weather.apparentTemperature != null ? `${Math.round(weather.apparentTemperature)}°` : i18n.t('no_data')}</div>
-                ` : ''}
+                ${this._renderCustomEntities()}
               </div>
               <div class="primary-right">
                 ${this.config.showClock && this.config.clockPosition === 'top' ? html`

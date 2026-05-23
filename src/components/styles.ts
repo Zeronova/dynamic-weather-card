@@ -109,13 +109,6 @@ export const cardStyles = css`
     opacity: 0.9;
   }
 
-  .temperature {
-    font-size: 64px;
-    font-weight: 100;
-    line-height: 1;
-    margin: 0;
-  }
-
   .details {
     display: flex;
     flex-direction: column;
@@ -134,12 +127,6 @@ export const cardStyles = css`
     flex: 1;
   }
 
-  .condition {
-    font-size: 20px;
-    font-weight: 400;
-    opacity: 0.9;
-  }
-
   .primary {
     display: flex;
     justify-content: space-between;
@@ -147,17 +134,17 @@ export const cardStyles = css`
     gap: 16px;
   }
 
-  .primary-left {
+  .primary-main {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 44px;
     flex: 1;
   }
 
-  .primary-row {
+  .condition-temp-group {
     display: flex;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
 
   .primary-right {
@@ -168,10 +155,49 @@ export const cardStyles = css`
     flex-shrink: 0;
   }
 
-  .ce-names {
+  .condition {
+    font-size: 20px;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 4px;
+  }
+
+  .temperature {
+    font-size: 64px;
+    font-weight: 100;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .temp-range {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+
+  .feels-like {
+    font-size: 16px;
+    font-weight: 300;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .temp-min, .temp-max {
+    margin: 0 4px;
+  }
+
+  .ce-columns {
     display: flex;
     gap: 24px;
-    align-items: flex-end;
+    align-items: flex-start;
+  }
+
+  .ce-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .ce-name {
@@ -179,33 +205,13 @@ export const cardStyles = css`
     font-weight: 400;
     opacity: 0.9;
     white-space: nowrap;
-  }
-
-  .ce-values {
-    display: flex;
-    gap: 24px;
-    align-items: baseline;
+    margin-bottom: 4px;
   }
 
   .ce-value {
     font-size: 56px;
     font-weight: 100;
     line-height: 1;
-  }
-
-  .feels-like {
-    font-size: 16px;
-    opacity: 0.85;
-    margin-top: 8px;
-  }
-
-  .temp-range {
-    font-size: 18px;
-    opacity: 0.9;
-    margin-top: 8px;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
   }
 
   .temp-min {
