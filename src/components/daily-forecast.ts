@@ -10,6 +10,7 @@ export class DailyForecast extends LitElement {
   @property({ type: Array }) forecast: WeatherForecast[] = [];
   @property({ type: String }) lang: string = 'en';
   @property({ type: String }) layout: 'horizontal' | 'vertical' = 'horizontal';
+  @property({ type: Boolean }) compact: boolean = false;
 
   static styles = forecastStyles;
 
@@ -38,7 +39,7 @@ export class DailyForecast extends LitElement {
     if (this.forecast.length === 0) return html``;
 
     return html`
-      <div class="forecast-container">
+      <div class="forecast-container${this.compact ? ' forecast-container--compact' : ''}">
         <div class="forecast-title">${i18n.t('daily_forecast_title')}</div>
         <div class="forecast-scroll${this.layout === 'vertical' ? ' forecast-scroll--vertical' : ''}">
           ${this.forecast.map(item => html`

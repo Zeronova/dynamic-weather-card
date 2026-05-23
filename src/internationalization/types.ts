@@ -90,12 +90,16 @@ export interface EditorTranslations {
   show_wind_gust: string;
   show_wind_direction: string;
   show_humidity: string;
+  show_precipitation: string;
+  precipitation_entity: string;
   show_min_temp: string;
   show_hourly_forecast: string;
   hourly_forecast_hours: string;
   show_daily_forecast: string;
   daily_forecast_days: string;
   show_sunrise_sunset: string;
+  show_sunrise: string;
+  show_sunset: string;
   sunrise_entity: string;
   sunset_entity: string;
   show_clock: string;
@@ -113,6 +117,8 @@ export interface EditorTranslations {
   custom_entity_1: string;
   custom_entity_2: string;
   custom_entity_3: string;
+  detail_entity: string;
+  detail_entity_2: string;
   time_background: string;
   time_background_description: string;
   language: string;

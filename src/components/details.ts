@@ -25,7 +25,7 @@ export class WeatherDetails extends LitElement {
 
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 6px 12px;
       font-size: var(--dw-font-size);
       opacity: 0.9;
@@ -63,12 +63,51 @@ export class WeatherDetails extends LitElement {
 
     return (
       (this.config.showHumidity && this.weather.humidity != null) ||
-      (this.config.showPrecipitation && this.weather.precipitation != null) ||
+      (this.hasPrecipitation()) ||
       (this.config.showWind && this.weather.windSpeed != null) ||
       (this.config.showWindDirection && this.weather.windBearing != null) ||
-      (this.config.showSunriseSunset && this.sunData?.hasSunData === true) ||
-      (!!this.config.detailEntity && !!this.hass?.states[this.config.detailEntity])
+      (this.config.showSunrise && this.sunData?.sunrise != null) ||
+      (this.config.showSunset && this.sunData?.sunset != null) ||
+      (!!this.config.detailEntity && !!this.hass?.states[this.config.detailEntity]) ||
+      (!!this.config.detailEntity2 && !!this.hass?.states[this.config.detailEntity2])
     );
+  }
+
+  private getPrecipitationValue(): number | null {
+    // Check dedicated precipitation entity first, then weather attribute
+    if (this.config?.precipitationEntity && this.hass) {
+      const stateObj = this.hass.states[this.config.precipitationEntity];
+      if (stateObj && stateObj.state !== 'unavailable' && stateObj.state !== 'unknown') {
+        const val = parseFloat(stateObj.state);
+        if (!isNaN(val)) return val;
+      }
+    }
+    return this.weather?.precipitation ?? null;
+  }
+
+  private getEntityState(entityId: string): string | null {
+    const stateObj = this.hass?.states?.[entityId];
+    if (!stateObj || stateObj.state === 'unavailable' || stateObj.state === 'unknown') return null;
+    return stateObj.state;
+  }
+
+  private getPrecipitationUnit(): string {
+    if (this.config?.precipitationEntity && this.hass) {
+      const stateObj = this.hass.states[this.config.precipitationEntity];
+      if (stateObj?.attributes?.unit_of_measurement) {
+        return stateObj.attributes.unit_of_measurement;
+      }
+    }
+    const attrs = this.entityAttributes || {};
+    return attrs.precipitation_unit || 'mm';
+  }
+
+  private hasPrecipitation(): boolean {
+    if (this.config?.precipitationEntity && this.hass) {
+      const stateObj = this.hass.states[this.config.precipitationEntity];
+      return !!(stateObj && stateObj.state !== 'unavailable' && stateObj.state !== 'unknown');
+    }
+    return this.weather?.precipitation != null;
   }
 
   private renderHumidity(): TemplateResult {
@@ -83,29 +122,16 @@ export class WeatherDetails extends LitElement {
   }
 
   private renderPrecipitation(): TemplateResult {
-    if (!this.config?.showPrecipitation || this.weather?.precipitation == null) return html``;
+    if (!this.config?.showPrecipitation) return html``;
+    const value = this.getPrecipitationValue();
+    if (value == null) return html``;
 
-    // Get unit from entity attributes or default to mm
-    const attrs = this.entityAttributes || {};
-    const unit = attrs.precipitation_unit || 'mm';
+    const unit = this.getPrecipitationUnit();
 
     return html`
       <div class="info-item">
         <span class="info-icon">${getSVGIcon('humidity')}</span>
-        <span>${this.weather.precipitation} ${unit}</span>
-      </div>
-    `;
-  }
-
-  private renderSunrise(): TemplateResult {
-    if (!this.config?.showSunriseSunset || !this.sunData?.hasSunData || !this.sunData.sunrise) {
-      return html``;
-    }
-
-    return html`
-      <div class="info-item">
-        <span class="info-icon">${getSVGIcon('sunrise')}</span>
-        <span>${formatTime(this.sunData.sunrise, this.config.clockFormat, i18n.t('am'), i18n.t('pm'))}</span>
+        <span>${value} ${unit}</span>
       </div>
     `;
   }
@@ -150,10 +176,19 @@ export class WeatherDetails extends LitElement {
     `;
   }
 
+  private renderSunrise(): TemplateResult {
+    if (!this.config?.showSunrise || !this.sunData?.sunrise) return html``;
+
+    return html`
+      <div class="info-item">
+        <span class="info-icon">${getSVGIcon('sunrise')}</span>
+        <span>${formatTime(this.sunData.sunrise, this.config.clockFormat, i18n.t('am'), i18n.t('pm'))}</span>
+      </div>
+    `;
+  }
+
   private renderSunset(): TemplateResult {
-    if (!this.config?.showSunriseSunset || !this.sunData?.hasSunData || !this.sunData.sunset) {
-      return html``;
-    }
+    if (!this.config?.showSunset || !this.sunData?.sunset) return html``;
 
     return html`
       <div class="info-item">
@@ -167,15 +202,34 @@ export class WeatherDetails extends LitElement {
     if (!this.config?.detailEntity || !this.hass) return html``;
 
     const stateObj = this.hass.states[this.config.detailEntity];
-    if (!stateObj) return html``;
+    if (!stateObj || stateObj.state === 'unavailable' || stateObj.state === 'unknown') return html``;
 
     const name = stateObj.attributes?.friendly_name || this.config.detailEntity;
     const value = stateObj.state;
+    const unit = stateObj.attributes?.unit_of_measurement || '';
 
     return html`
       <div class="info-item">
         <span class="info-icon">${getSVGIcon('humidity')}</span>
-        <span>${value}</span>
+        <span>${value}${unit ? ' ' + unit : ''}</span>
+      </div>
+    `;
+  }
+
+  private renderDetailEntity2(): TemplateResult {
+    if (!this.config?.detailEntity2 || !this.hass) return html``;
+
+    const stateObj = this.hass.states[this.config.detailEntity2];
+    if (!stateObj || stateObj.state === 'unavailable' || stateObj.state === 'unknown') return html``;
+
+    const name = stateObj.attributes?.friendly_name || this.config.detailEntity2;
+    const value = stateObj.state;
+    const unit = stateObj.attributes?.unit_of_measurement || '';
+
+    return html`
+      <div class="info-item">
+        <span class="info-icon">${getSVGIcon('humidity')}</span>
+        <span>${value}${unit ? ' ' + unit : ''}</span>
       </div>
     `;
   }
@@ -185,13 +239,16 @@ export class WeatherDetails extends LitElement {
 
     return html`
       <div class="info-grid" style="--dw-font-size: ${this.fontSize}px">
+        <!-- Row 1: Humidity, Precipitation, Wind, Wind Direction -->
         ${this.renderHumidity()}
         ${this.renderPrecipitation()}
         ${this.renderWind()}
         ${this.renderWindDirection()}
+        <!-- Row 2: Sunrise, Sunset, Detail Entity 1, Detail Entity 2 -->
         ${this.renderSunrise()}
         ${this.renderSunset()}
         ${this.renderDetailEntity()}
+        ${this.renderDetailEntity2()}
       </div>
     `;
   }

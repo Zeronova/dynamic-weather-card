@@ -261,6 +261,31 @@ export const cardStyles = css`
     width: 100%;
   }
 
+  .forecast-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .forecast-left {
+    display: flex;
+    justify-content: flex-start;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .forecast-right {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    min-width: 0;
+  }
+
   .forecast-title {
     font-size: 14px;
     font-weight: 500;

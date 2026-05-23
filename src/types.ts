@@ -117,6 +117,8 @@ export interface WeatherCardConfig {
   showWindDirection?: boolean;
   showHumidity?: boolean;
   showPrecipitation?: boolean;
+  showSunrise?: boolean;
+  showSunset?: boolean;
   showMinTemp?: boolean;
   showForecast?: boolean;
   showHourlyForecast?: boolean;
@@ -136,6 +138,8 @@ export interface WeatherCardConfig {
   timeBackground?: TimeBackgroundSegment[];
   customEntities?: Array<{ entity: string; name?: string }>;
   detailEntity?: string;
+  detailEntity2?: string;
+  precipitationEntity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
   windSpeedUnit?: 'ms' | 'kmh';
@@ -227,6 +231,8 @@ export interface ConfigInput {
   show_wind_direction?: boolean;
   show_humidity?: boolean;
   show_precipitation?: boolean;
+  show_sunrise?: boolean;
+  show_sunset?: boolean;
   show_min_temp?: boolean;
   show_forecast?: boolean;
   show_hourly_forecast?: boolean;
@@ -245,6 +251,8 @@ export interface ConfigInput {
   time_background?: TimeBackgroundSegment[];
   custom_entities?: Array<{ entity: string; name?: string }>;
   detail_entity?: string;
+  detail_entity_2?: string;
+  precipitation_entity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
   sunrise_entity?: string;
@@ -263,6 +271,8 @@ export interface WeatherCardConfigInternal extends WeatherCardConfig {
   sunsetEntity?: string | null;
   templowAttribute?: string | null;
   detailEntity?: string;
+  detailEntity2?: string;
+  precipitationEntity?: string;
   tapAction?: ActionConfig;
   holdAction?: ActionConfig;
   doubleTapAction?: ActionConfig;
@@ -275,10 +285,13 @@ export interface DetailsConfig {
   showWind: boolean;
   showWindGust: boolean;
   showWindDirection: boolean;
-  showSunriseSunset: boolean;
+  showSunrise: boolean;
+  showSunset: boolean;
   clockFormat: '12h' | '24h';
   windSpeedUnit: 'ms' | 'kmh';
   detailEntity: string | null;
+  detailEntity2: string | null;
+  precipitationEntity: string | null;
 }
 
 // Custom Card Registration

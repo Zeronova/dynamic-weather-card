@@ -144,10 +144,13 @@ export class AnimatedWeatherCard extends LitElement {
       showWind: this.config.showWind ?? true,
       showWindGust: this.config.showWindGust ?? true,
       showWindDirection: this.config.showWindDirection ?? true,
-      showSunriseSunset: this.config.showSunriseSunset ?? true,
+      showSunrise: this.config.showSunrise ?? true,
+      showSunset: this.config.showSunset ?? true,
       clockFormat: this.config.clockFormat ?? '24h',
       windSpeedUnit: this.config.windSpeedUnit ?? 'ms',
-      detailEntity: this.config.detailEntity || null
+      detailEntity: this.config.detailEntity || null,
+      detailEntity2: this.config.detailEntity2 || null,
+      precipitationEntity: this.config.precipitationEntity || null
     };
   }
 
@@ -196,6 +199,8 @@ export class AnimatedWeatherCard extends LitElement {
       showWindDirection: config.show_wind_direction !== false,
       showHumidity: config.show_humidity !== false,
       showPrecipitation: config.show_precipitation === true,
+      showSunrise: config.show_sunrise ?? config.show_sunrise_sunset ?? true,
+      showSunset: config.show_sunset ?? config.show_sunrise_sunset ?? true,
       showMinTemp: config.show_min_temp !== false,
       showForecast: config.show_forecast === true,
       showHourlyForecast: showHourlyForecast === true,
@@ -217,6 +222,8 @@ export class AnimatedWeatherCard extends LitElement {
       sunsetEntity: config.sunset_entity || null,
       templowAttribute: config.templow_attribute || null,
       detailEntity: config.detail_entity || '',
+      detailEntity2: config.detail_entity_2 || '',
+      precipitationEntity: config.precipitation_entity || '',
       tapAction: config.tap_action || { action: 'more-info' },
       holdAction: config.hold_action || { action: 'none' },
       doubleTapAction: config.double_tap_action || { action: 'none' },
@@ -360,16 +367,40 @@ export class AnimatedWeatherCard extends LitElement {
                 ></weather-clock>
               ` : ''}
             </div>
-            <hourly-forecast
-              .forecast=${hourlyForecast}
-              .clockFormat=${this.config.clockFormat ?? '24h'}
-              .layout=${this.config.forecastLayout ?? 'horizontal'}
-            ></hourly-forecast>
-            <daily-forecast
-              .forecast=${dailyForecast}
-              .lang=${i18n.lang}
-              .layout=${this.config.forecastLayout ?? 'horizontal'}
-            ></daily-forecast>
+            ${this.config.showHourlyForecast && this.config.showDailyForecast ? html`
+              <div class="forecast-row">
+                <div class="forecast-left">
+                  <hourly-forecast
+                    .forecast=${hourlyForecast}
+                    .clockFormat=${this.config.clockFormat ?? '24h'}
+                    .layout=${this.config.forecastLayout ?? 'horizontal'}
+                    .compact=${true}
+                  ></hourly-forecast>
+                </div>
+                <div class="forecast-right">
+                  <daily-forecast
+                    .forecast=${dailyForecast}
+                    .lang=${i18n.lang}
+                    .layout=${this.config.forecastLayout ?? 'horizontal'}
+                    .compact=${true}
+                  ></daily-forecast>
+                </div>
+              </div>
+            ` : ''}
+            ${this.config.showHourlyForecast && !this.config.showDailyForecast ? html`
+              <hourly-forecast
+                .forecast=${hourlyForecast}
+                .clockFormat=${this.config.clockFormat ?? '24h'}
+                .layout=${this.config.forecastLayout ?? 'horizontal'}
+              ></hourly-forecast>
+            ` : ''}
+            ${!this.config.showHourlyForecast && this.config.showDailyForecast ? html`
+              <daily-forecast
+                .forecast=${dailyForecast}
+                .lang=${i18n.lang}
+                .layout=${this.config.forecastLayout ?? 'horizontal'}
+              ></daily-forecast>
+            ` : ''}
           </div>
         </div>
       </ha-card>

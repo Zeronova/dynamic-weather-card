@@ -17,6 +17,12 @@ export const forecastStyles = css`
     width: 100%;
   }
 
+  .forecast-container--compact {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
   .forecast-title {
     font-size: 14px;
     font-weight: 500;
