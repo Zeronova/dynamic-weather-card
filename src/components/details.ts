@@ -24,7 +24,7 @@ export class WeatherDetails extends LitElement {
 
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 6px 12px;
       font-size: var(--dw-font-size);
       opacity: 0.9;
@@ -63,6 +63,7 @@ export class WeatherDetails extends LitElement {
     return (
       (this.config.showHumidity && this.weather.humidity != null) ||
       (this.config.showWind && this.weather.windSpeed != null) ||
+      (this.config.showWindDirection && this.weather.windBearing != null) ||
       (this.config.showSunriseSunset && this.sunData?.hasSunData === true)
     );
   }
@@ -104,14 +105,29 @@ export class WeatherDetails extends LitElement {
       gustText = ` / ${gustSpeed} ${unit}`;
     }
 
-    const icon = this.config.showWindDirection && this.weather.windBearing != null
-      ? windDirection(this.weather.windBearing)
-      : getSVGIcon('wind');
+    return html`
+      <div class="info-item">
+        <span class="info-icon">${getSVGIcon('wind')}</span>
+        <span>${speed} ${unit}${gustText}</span>
+      </div>
+    `;
+  }
+
+  private renderWindDirection(): TemplateResult {
+    if (!this.config?.showWindDirection || this.weather?.windBearing == null) return html``;
+
+    const bearing = this.weather.windBearing;
+    const icon = windDirection(bearing);
+
+    // Convert bearing to cardinal direction
+    const dirs = ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'];
+    const index = Math.round(bearing / 45) % 8;
+    const cardinal = dirs[index];
 
     return html`
       <div class="info-item">
         <span class="info-icon">${icon}</span>
-        <span>${speed} ${unit}${gustText}</span>
+        <span>${bearing}° ${cardinal}</span>
       </div>
     `;
   }
@@ -135,8 +151,9 @@ export class WeatherDetails extends LitElement {
     return html`
       <div class="info-grid" style="--dw-font-size: ${this.fontSize}px">
         ${this.renderHumidity()}
-        ${this.renderSunrise()}
         ${this.renderWind()}
+        ${this.renderWindDirection()}
+        ${this.renderSunrise()}
         ${this.renderSunset()}
       </div>
     `;
