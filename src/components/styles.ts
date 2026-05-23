@@ -160,10 +160,12 @@ export const cardStyles = css`
     flex-wrap: wrap;
   }
 
-  .primary-right-items {
-    margin-left: auto;
+  .primary-right {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
   }
 
   .ce-names {

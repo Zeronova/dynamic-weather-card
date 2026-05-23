@@ -326,17 +326,6 @@ export class AnimatedWeatherCard extends LitElement {
                 <div class="primary-row">
                   <div class="temperature">${weather.temperature != null ? Math.round(weather.temperature) + '°' : i18n.t('no_data')}</div>
                   ${this._renderCustomEntityValues()}
-                  <div class="primary-right-items">
-                    ${this.config.showClock && this.config.clockPosition === 'top' ? html`
-                      <weather-clock
-                        .format=${this.config.clockFormat}
-                        .size=${this.config.clockSize ?? 48}
-                        .showDate=${this.config.showDate ?? false}
-                        .showSeconds=${this.config.showSeconds ?? false}
-                        .locale=${i18n.lang}
-                      ></weather-clock>
-                    ` : ''}
-                  </div>
                 </div>
                 ${this.config.showMinTemp ? html`
                   <div class="temp-range">
@@ -345,6 +334,17 @@ export class AnimatedWeatherCard extends LitElement {
                 ` : ''}
                 ${this.config.showFeelsLike ? html`
                   <div class="feels-like">${i18n.t('feels_like')} ${weather.apparentTemperature != null ? `${Math.round(weather.apparentTemperature)}°` : i18n.t('no_data')}</div>
+                ` : ''}
+              </div>
+              <div class="primary-right">
+                ${this.config.showClock && this.config.clockPosition === 'top' ? html`
+                  <weather-clock
+                    .format=${this.config.clockFormat}
+                    .size=${this.config.clockSize ?? 48}
+                    .showDate=${this.config.showDate ?? false}
+                    .showSeconds=${this.config.showSeconds ?? false}
+                    .locale=${i18n.lang}
+                  ></weather-clock>
                 ` : ''}
               </div>
             </div>
