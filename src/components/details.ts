@@ -10,22 +10,34 @@ export class WeatherDetails extends LitElement {
   @property({ type: Object }) sunData: SunData | null = null;
   @property({ type: Object }) config: DetailsConfig | null = null;
   @property({ type: Object }) entityAttributes: WeatherEntityAttributes | null = null;
+  @property({ type: String }) customEntity: string | null = null;
+  @property({ type: String }) customEntityName: string | null = null;
+  @property({ type: Number }) fontSize: number = 13;
 
   static styles = css`
     :host {
       display: block;
+      --dw-font-size: 13px;
     }
 
     :host([hidden]) {
       display: none;
     }
 
+    .details-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
     .info-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px 12px;
-      font-size: 13px;
+      font-size: var(--dw-font-size);
       opacity: 0.9;
+      flex: 1 1 auto;
     }
 
     .info-item {
@@ -52,6 +64,29 @@ export class WeatherDetails extends LitElement {
       width: 20px;
       height: 20px;
       display: block;
+    }
+
+    .custom-entity {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      text-align: right;
+      padding-left: 16px;
+      flex: 0 0 auto;
+      min-width: 60px;
+    }
+
+    .custom-entity-label {
+      font-size: calc(var(--dw-font-size) * 0.85);
+      opacity: 0.8;
+      line-height: 1.3;
+    }
+
+    .custom-entity-value {
+      font-size: calc(var(--dw-font-size) * 1.5);
+      font-weight: 500;
+      line-height: 1.3;
     }
   `;
 
@@ -131,11 +166,19 @@ export class WeatherDetails extends LitElement {
     if (!this.hasContent()) return html``;
 
     return html`
-      <div class="info-grid">
-        ${this.renderHumidity()}
-        ${this.renderSunrise()}
-        ${this.renderWind()}
-        ${this.renderSunset()}
+      <div class="details-row" style="--dw-font-size: ${this.fontSize}px">
+        <div class="info-grid">
+          ${this.renderHumidity()}
+          ${this.renderSunrise()}
+          ${this.renderWind()}
+          ${this.renderSunset()}
+        </div>
+        ${this.customEntity ? html`
+          <div class="custom-entity">
+            <span class="custom-entity-label">${this.customEntityName}</span>
+            <span class="custom-entity-value">${this.customEntity}</span>
+          </div>
+        ` : ''}
       </div>
     `;
   }

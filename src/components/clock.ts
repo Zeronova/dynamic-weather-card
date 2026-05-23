@@ -78,7 +78,7 @@ export class WeatherClock extends HTMLElement {
           color: var(--primary-text-color, #fff);
         }
         .clock-date {
-          font-size: ${Math.max(this._size * 0.35, 12)}px;
+          font-size: ${Math.max(this._size * 0.45, 12)}px;
           font-weight: 300;
           color: var(--secondary-text-color, rgba(255,255,255,0.7));
           white-space: nowrap;

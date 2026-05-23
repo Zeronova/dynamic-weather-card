@@ -127,7 +127,10 @@ export interface WeatherCardConfig {
   clockSize?: number;
   showDate?: boolean;
   overlayOpacity?: number;
+  fontSize?: number;
   timeBackground?: TimeBackgroundSegment[];
+  customEntity?: string;
+  customEntityName?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
   windSpeedUnit?: 'ms' | 'kmh';
@@ -230,7 +233,10 @@ export interface ConfigInput {
   clock_size?: number;
   show_date?: boolean;
   overlay_opacity?: number;
+  font_size?: number;
   time_background?: TimeBackgroundSegment[];
+  custom_entity?: string;
+  custom_entity_name?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
   sunrise_entity?: string;

@@ -149,6 +149,12 @@ export class AnimatedWeatherCard extends LitElement {
     };
   }
 
+  private getCustomEntityState(): string | null {
+    if (!this.hass || !this.config.customEntity) return null;
+    const state = this.hass.states[this.config.customEntity];
+    return state ? state.state : null;
+  }
+
   setConfig(config: ConfigInput): void {
     if (!config.entity) {
       throw new Error('Please define a weather entity');
@@ -186,7 +192,10 @@ export class AnimatedWeatherCard extends LitElement {
       tapAction: config.tap_action || { action: 'more-info' },
       holdAction: config.hold_action || { action: 'none' },
       doubleTapAction: config.double_tap_action || { action: 'none' },
-      timeBackground: config.time_background || undefined
+      timeBackground: config.time_background || undefined,
+      fontSize: config.font_size ?? DEFAULT_CONFIG.fontSize,
+      customEntity: config.custom_entity || null,
+      customEntityName: config.custom_entity_name || null
     };
 
     if (this.config.language) {
@@ -285,12 +294,14 @@ export class AnimatedWeatherCard extends LitElement {
                   <div class="feels-like">${i18n.t('feels_like')} ${weather.apparentTemperature != null ? `${Math.round(weather.apparentTemperature)}°` : i18n.t('no_data')}</div>
                 ` : ''}
               </div>
-              <weather-clock
-                .format=${this.config.showClock && this.config.clockPosition === 'top' ? this.config.clockFormat : null}
-                .size=${this.config.showClock && this.config.clockPosition === 'top' ? (this.config.clockSize ?? 48) : null}
-                .showDate=${this.config.showClock && this.config.clockPosition === 'top' ? (this.config.showDate ?? false) : null}
-                .locale=${i18n.lang}
-              ></weather-clock>
+              ${this.config.showClock && this.config.clockPosition === 'top' ? html`
+                <weather-clock
+                  .format=${this.config.clockFormat}
+                  .size=${this.config.clockSize ?? 48}
+                  .showDate=${this.config.showDate ?? false}
+                  .locale=${i18n.lang}
+                ></weather-clock>
+              ` : ''}
             </div>
             <div class="details ${this.config.showClock && this.config.clockPosition === 'details' ? 'details--clock' : ''}">
               <weather-details
@@ -298,13 +309,18 @@ export class AnimatedWeatherCard extends LitElement {
                 .sunData=${sunData}
                 .config=${this.getDetailsConfig()}
                 .entityAttributes=${getWeatherAttributes(this.hass, this.config.entity)}
+                .customEntity=${this.getCustomEntityState()}
+                .customEntityName=${this.config.customEntityName ?? this.config.customEntity}
+                .fontSize=${this.config.fontSize ?? 13}
               ></weather-details>
-              <weather-clock
-                .format=${this.config.showClock && this.config.clockPosition === 'details' ? this.config.clockFormat : null}
-                .size=${this.config.showClock && this.config.clockPosition === 'details' ? (this.config.clockSize ?? 48) : null}
-                .showDate=${this.config.showClock && this.config.clockPosition === 'details' ? (this.config.showDate ?? false) : null}
-                .locale=${i18n.lang}
-              ></weather-clock>
+              ${this.config.showClock && this.config.clockPosition === 'details' ? html`
+                <weather-clock
+                  .format=${this.config.clockFormat}
+                  .size=${this.config.clockSize ?? 48}
+                  .showDate=${this.config.showDate ?? false}
+                  .locale=${i18n.lang}
+                ></weather-clock>
+              ` : ''}
             </div>
             <hourly-forecast
               .forecast=${hourlyForecast}

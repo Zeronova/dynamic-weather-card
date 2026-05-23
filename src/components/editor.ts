@@ -101,6 +101,9 @@ export class DynamicWeatherCardEditor extends LitElement {
       { name: 'clock_size', selector: { number: { min: 16, max: 120, step: 2, mode: 'box' } } },
       { name: 'show_date', selector: { boolean: {} } },
       { name: 'overlay_opacity', selector: { number: { min: 0, max: 1, step: 0.05, mode: 'box' } } },
+      { name: 'font_size', selector: { number: { min: 8, max: 30, step: 1, mode: 'box' } } },
+      { name: 'custom_entity', selector: { text: {} } },
+      { name: 'custom_entity_name', selector: { text: {} } },
       {
         name: 'language',
         selector: {
