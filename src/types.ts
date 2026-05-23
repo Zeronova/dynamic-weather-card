@@ -127,6 +127,7 @@ export interface WeatherCardConfig {
   clockSize?: number;
   showDate?: boolean;
   showSeconds?: boolean;
+  forecastLayout?: 'horizontal' | 'vertical';
   overlayOpacity?: number;
   fontSize?: number;
   timeBackground?: TimeBackgroundSegment[];

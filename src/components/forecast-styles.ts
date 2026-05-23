@@ -90,4 +90,26 @@ export const forecastStyles = css`
     opacity: 0.6;
     font-size: 14px;
   }
+
+  .forecast-scroll--vertical {
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: visible;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+
+  .forecast-scroll--vertical .forecast-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-width: unset;
+    width: 100%;
+    padding: 6px 0;
+  }
+
+  .forecast-scroll--vertical .forecast-time {
+    flex: 1;
+    text-align: left;
+  }
 `;

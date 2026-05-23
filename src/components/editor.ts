@@ -18,6 +18,20 @@ export class DynamicWeatherCardEditor extends LitElement {
   @state() private _config: WeatherCardEditorConfig = {};
 
   setConfig(config: WeatherCardEditorConfig): void {
+    // Convert customEntities array to flat editor fields
+    const flat: Record<string, string> = {};
+    const entities = (config as Record<string, unknown>).custom_entities || (config as Record<string, unknown>).customEntities || [];
+    if (Array.isArray(entities)) {
+      (entities as Array<{ entity: string }>).forEach((e, i) => {
+        if (i < 3 && e?.entity) flat[`custom_entity_${i + 1}`] = e.entity;
+      });
+    }
+    // Handle camelCase forecastLayout fallback
+    const cfg = config as Record<string, unknown>;
+    if (!cfg.forecast_layout && cfg.forecastLayout) {
+      flat.forecast_layout = cfg.forecastLayout as string;
+    }
+
     this._config = {
       name: '',
       height: DEFAULT_CONFIG.height,
@@ -37,12 +51,18 @@ export class DynamicWeatherCardEditor extends LitElement {
       clock_format: DEFAULT_CONFIG.clockFormat,
       clock_size: DEFAULT_CONFIG.clockSize,
       show_date: DEFAULT_CONFIG.showDate,
+      show_seconds: DEFAULT_CONFIG.showSeconds,
+      forecast_layout: DEFAULT_CONFIG.forecastLayout,
       overlay_opacity: DEFAULT_CONFIG.overlayOpacity,
       language: DEFAULT_CONFIG.language,
       wind_speed_unit: DEFAULT_CONFIG.windSpeedUnit,
       sunrise_entity: '',
       sunset_entity: '',
-      ...config
+      custom_entity_1: '',
+      custom_entity_2: '',
+      custom_entity_3: '',
+      ...config,
+      ...flat
     };
   }
 
@@ -101,6 +121,17 @@ export class DynamicWeatherCardEditor extends LitElement {
       { name: 'clock_size', selector: { number: { min: 16, max: 120, step: 2, mode: 'box' } } },
       { name: 'show_date', selector: { boolean: {} } },
       { name: 'show_seconds', selector: { boolean: {} } },
+      {
+        name: 'forecast_layout',
+        selector: {
+          select: {
+            options: [
+              { label: i18n.t('editor.forecast_layout_horizontal'), value: 'horizontal' },
+              { label: i18n.t('editor.forecast_layout_vertical'), value: 'vertical' }
+            ]
+          }
+        }
+      },
       { name: 'overlay_opacity', selector: { number: { min: 0, max: 1, step: 0.05, mode: 'box' } } },
       { name: 'font_size', selector: { number: { min: 8, max: 30, step: 1, mode: 'box' } } },
       { name: 'custom_entity_1', selector: { entity: { domain: 'sensor' } } },

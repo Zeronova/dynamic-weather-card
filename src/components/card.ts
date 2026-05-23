@@ -206,6 +206,7 @@ export class AnimatedWeatherCard extends LitElement {
       clockSize: config.clock_size ?? DEFAULT_CONFIG.clockSize,
       showDate: config.show_date === true,
       showSeconds: config.show_seconds ?? DEFAULT_CONFIG.showSeconds,
+      forecastLayout: config.forecast_layout || DEFAULT_CONFIG.forecastLayout,
       overlayOpacity: config.overlay_opacity !== undefined ? config.overlay_opacity : DEFAULT_CONFIG.overlayOpacity,
       language: config.language || DEFAULT_CONFIG.language,
       windSpeedUnit: config.wind_speed_unit || DEFAULT_CONFIG.windSpeedUnit,
@@ -357,10 +358,12 @@ export class AnimatedWeatherCard extends LitElement {
             <hourly-forecast
               .forecast=${hourlyForecast}
               .clockFormat=${this.config.clockFormat ?? '24h'}
+              .layout=${this.config.forecastLayout ?? 'horizontal'}
             ></hourly-forecast>
             <daily-forecast
               .forecast=${dailyForecast}
               .lang=${i18n.lang}
+              .layout=${this.config.forecastLayout ?? 'horizontal'}
             ></daily-forecast>
           </div>
         </div>

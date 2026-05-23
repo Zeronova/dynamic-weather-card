@@ -9,6 +9,7 @@ import type { WeatherForecast } from '../types.js';
 export class HourlyForecast extends LitElement {
   @property({ type: Array }) forecast: WeatherForecast[] = [];
   @property({ type: String }) clockFormat: '12h' | '24h' = '24h';
+  @property({ type: String }) layout: 'horizontal' | 'vertical' = 'horizontal';
 
   static styles = forecastStyles;
 
@@ -17,7 +18,9 @@ export class HourlyForecast extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.updateComplete.then(() => {
-      this._cleanup = setupHorizontalScroll(this.shadowRoot, '.forecast-scroll');
+      if (this.layout === 'horizontal') {
+        this._cleanup = setupHorizontalScroll(this.shadowRoot, '.forecast-scroll');
+      }
     });
   }
 
@@ -37,7 +40,7 @@ export class HourlyForecast extends LitElement {
     return html`
       <div class="forecast-container">
         <div class="forecast-title">${i18n.t('forecast_title')}</div>
-        <div class="forecast-scroll">
+        <div class="forecast-scroll${this.layout === 'vertical' ? ' forecast-scroll--vertical' : ''}">
           ${this.forecast.map(item => html`
             <div class="forecast-item">
               <div class="forecast-time">${formatForecastTime(item.datetime, this.clockFormat, i18n.t('am'), i18n.t('pm'))}</div>
