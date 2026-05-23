@@ -126,11 +126,11 @@ export interface WeatherCardConfig {
   clockFormat?: '12h' | '24h';
   clockSize?: number;
   showDate?: boolean;
+  showSeconds?: boolean;
   overlayOpacity?: number;
   fontSize?: number;
   timeBackground?: TimeBackgroundSegment[];
-  customEntity?: string;
-  customEntityName?: string;
+  customEntities?: Array<{ entity: string; name?: string }>;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
   windSpeedUnit?: 'ms' | 'kmh';
@@ -232,11 +232,11 @@ export interface ConfigInput {
   clock_format?: '12h' | '24h';
   clock_size?: number;
   show_date?: boolean;
+  show_seconds?: boolean;
   overlay_opacity?: number;
   font_size?: number;
   time_background?: TimeBackgroundSegment[];
-  custom_entity?: string;
-  custom_entity_name?: string;
+  custom_entities?: Array<{ entity: string; name?: string }>;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
   sunrise_entity?: string;

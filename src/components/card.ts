@@ -149,10 +149,33 @@ export class AnimatedWeatherCard extends LitElement {
     };
   }
 
-  private getCustomEntityState(): string | null {
-    if (!this.hass || !this.config.customEntity) return null;
-    const state = this.hass.states[this.config.customEntity];
-    return state ? state.state : null;
+  private _renderCustomEntities(): TemplateResult | '' {
+    const entities = this.getCustomEntityStates();
+    if (!entities.length) return '';
+
+    return html`
+      <div class="primary-custom-entities">
+        ${entities.map(e => html`
+          <div class="ce-item">
+            <div class="ce-value">${e.state}°</div>
+            <div class="ce-name">${e.name}</div>
+          </div>
+        `)}
+      </div>
+    `;
+  }
+
+  private getCustomEntityStates(): Array<{ state: string; name: string } | null> {
+    if (!this.hass || !this.config.customEntities?.length) return [];
+
+    return this.config.customEntities.slice(0, 3).map(ce => {
+      const stateObj = this.hass!.states[ce.entity];
+      if (!stateObj) return null;
+      return {
+        state: stateObj.state,
+        name: ce.name || ce.entity
+      };
+    }).filter((e): e is { state: string; name: string } => e !== null);
   }
 
   setConfig(config: ConfigInput): void {
@@ -183,6 +206,7 @@ export class AnimatedWeatherCard extends LitElement {
       clockFormat: config.clock_format || DEFAULT_CONFIG.clockFormat,
       clockSize: config.clock_size ?? DEFAULT_CONFIG.clockSize,
       showDate: config.show_date === true,
+      showSeconds: config.show_seconds ?? DEFAULT_CONFIG.showSeconds,
       overlayOpacity: config.overlay_opacity !== undefined ? config.overlay_opacity : DEFAULT_CONFIG.overlayOpacity,
       language: config.language || DEFAULT_CONFIG.language,
       windSpeedUnit: config.wind_speed_unit || DEFAULT_CONFIG.windSpeedUnit,
@@ -194,8 +218,12 @@ export class AnimatedWeatherCard extends LitElement {
       doubleTapAction: config.double_tap_action || { action: 'none' },
       timeBackground: config.time_background || undefined,
       fontSize: config.font_size ?? DEFAULT_CONFIG.fontSize,
-      customEntity: config.custom_entity || null,
-      customEntityName: config.custom_entity_name || null
+      customEntities: config.custom_entities?.length
+        ? config.custom_entities.slice(0, 3).map((ce: any) => ({
+            entity: typeof ce === 'string' ? ce : ce.entity,
+            name: typeof ce === 'string' ? undefined : ce.name
+          }))
+        : []
     };
 
     if (this.config.language) {
@@ -294,14 +322,18 @@ export class AnimatedWeatherCard extends LitElement {
                   <div class="feels-like">${i18n.t('feels_like')} ${weather.apparentTemperature != null ? `${Math.round(weather.apparentTemperature)}°` : i18n.t('no_data')}</div>
                 ` : ''}
               </div>
-              ${this.config.showClock && this.config.clockPosition === 'top' ? html`
-                <weather-clock
-                  .format=${this.config.clockFormat}
-                  .size=${this.config.clockSize ?? 48}
-                  .showDate=${this.config.showDate ?? false}
-                  .locale=${i18n.lang}
-                ></weather-clock>
-              ` : ''}
+              <div class="primary-right">
+                ${this._renderCustomEntities()}
+                ${this.config.showClock && this.config.clockPosition === 'top' ? html`
+                  <weather-clock
+                    .format=${this.config.clockFormat}
+                    .size=${this.config.clockSize ?? 48}
+                    .showDate=${this.config.showDate ?? false}
+                    .showSeconds=${this.config.showSeconds ?? false}
+                    .locale=${i18n.lang}
+                  ></weather-clock>
+                ` : ''}
+              </div>
             </div>
             <div class="details ${this.config.showClock && this.config.clockPosition === 'details' ? 'details--clock' : ''}">
               <weather-details
@@ -309,8 +341,6 @@ export class AnimatedWeatherCard extends LitElement {
                 .sunData=${sunData}
                 .config=${this.getDetailsConfig()}
                 .entityAttributes=${getWeatherAttributes(this.hass, this.config.entity)}
-                .customEntity=${this.getCustomEntityState()}
-                .customEntityName=${this.config.customEntityName ?? this.config.customEntity}
                 .fontSize=${this.config.fontSize ?? 13}
               ></weather-details>
               ${this.config.showClock && this.config.clockPosition === 'details' ? html`
@@ -318,6 +348,7 @@ export class AnimatedWeatherCard extends LitElement {
                   .format=${this.config.clockFormat}
                   .size=${this.config.clockSize ?? 48}
                   .showDate=${this.config.showDate ?? false}
+                  .showSeconds=${this.config.showSeconds ?? false}
                   .locale=${i18n.lang}
                 ></weather-clock>
               ` : ''}

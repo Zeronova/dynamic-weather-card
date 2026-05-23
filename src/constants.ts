@@ -40,9 +40,11 @@ export const DEFAULT_CONFIG: Required<Omit<WeatherCardConfig, 'entity' | 'type'>
   clockFormat: '24h',
   clockSize: 48,
   showDate: false,
+  showSeconds: false,
   overlayOpacity: 0.1,
   language: 'auto',
   height: null,
   windSpeedUnit: 'ms',
-  fontSize: 13
+  fontSize: 13,
+  customEntities: []
 };

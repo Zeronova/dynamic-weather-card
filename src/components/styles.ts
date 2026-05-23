@@ -152,6 +152,39 @@ export const cardStyles = css`
     flex-direction: column;
   }
 
+  .primary-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .primary-custom-entities {
+    display: flex;
+    gap: 20px;
+  }
+
+  .ce-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ce-value {
+    font-size: 56px;
+    font-weight: 100;
+    line-height: 1;
+  }
+
+  .ce-name {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 4px;
+    white-space: nowrap;
+  }
+
   .feels-like {
     font-size: 16px;
     opacity: 0.85;

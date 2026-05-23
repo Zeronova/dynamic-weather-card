@@ -100,10 +100,15 @@ export class DynamicWeatherCardEditor extends LitElement {
       },
       { name: 'clock_size', selector: { number: { min: 16, max: 120, step: 2, mode: 'box' } } },
       { name: 'show_date', selector: { boolean: {} } },
+      { name: 'show_seconds', selector: { boolean: {} } },
       { name: 'overlay_opacity', selector: { number: { min: 0, max: 1, step: 0.05, mode: 'box' } } },
       { name: 'font_size', selector: { number: { min: 8, max: 30, step: 1, mode: 'box' } } },
-      { name: 'custom_entity', selector: { text: {} } },
-      { name: 'custom_entity_name', selector: { text: {} } },
+      { name: 'custom_entity_1', selector: { entity: {} } },
+      { name: 'custom_entity_1_name', selector: { text: {} } },
+      { name: 'custom_entity_2', selector: { entity: {} } },
+      { name: 'custom_entity_2_name', selector: { text: {} } },
+      { name: 'custom_entity_3', selector: { entity: {} } },
+      { name: 'custom_entity_3_name', selector: { text: {} } },
       {
         name: 'language',
         selector: {
@@ -146,6 +151,24 @@ export class DynamicWeatherCardEditor extends LitElement {
   private _valueChanged(ev: CustomEvent): void {
     const value = ev.detail?.value;
     if (!value) return;
+
+    // Convert flat custom_entity_N fields to custom_entities array
+    const entities: Array<{ entity: string; name?: string }> = [];
+    for (let i = 1; i <= 3; i++) {
+      const entityKey = `custom_entity_${i}`;
+      const nameKey = `${entityKey}_name`;
+      if (value[entityKey]) {
+        entities.push({
+          entity: value[entityKey],
+          name: value[nameKey] || undefined
+        });
+      }
+      delete value[entityKey];
+      delete value[nameKey];
+    }
+    if (entities.length) {
+      value.custom_entities = entities;
+    }
 
     this._config = value;
     this.dispatchEvent(new CustomEvent('config-changed', {
