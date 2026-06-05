@@ -41,31 +41,6 @@ export class WeatherDetails extends LitElement {
       white-space: nowrap;
     }
 
-    .info-item.detail-with-name {
-      display: flex;
-      align-items: flex-start;
-      gap: 3px;
-    }
-
-    .info-item.detail-with-name .detail-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.3;
-    }
-
-    .detail-text .detail-name {
-      font-size: 0.8em;
-      opacity: 0.7;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 80px;
-    }
-
-    .detail-text .detail-value {
-      white-space: nowrap;
-    }
-
     .info-icon {
       font-size: 16px;
       width: 20px;
@@ -240,18 +215,14 @@ export class WeatherDetails extends LitElement {
     const stateObj = this.hass.states[this.config.detailEntity];
     if (!stateObj || stateObj.state === 'unavailable' || stateObj.state === 'unknown') return html``;
 
-    const name = stateObj.attributes?.friendly_name || this.config.detailEntity;
     const value = stateObj.state;
     const unit = stateObj.attributes?.unit_of_measurement || '';
     const entityIcon = stateObj.attributes?.icon || '';
 
     return html`
-      <div class="info-item detail-with-name">
+      <div class="info-item">
         <span class="info-icon">${this.renderIcon(this.config.detailEntityIcon, entityIcon)}</span>
-        <span class="detail-text">
-          <span class="detail-name">${name}</span>
-          <span class="detail-value">${value}${unit ? ' ' + unit : ''}</span>
-        </span>
+        <span>${value}${unit ? ' ' + unit : ''}</span>
       </div>
     `;
   }
@@ -264,16 +235,23 @@ export class WeatherDetails extends LitElement {
 
     const phase = stateObj.state; // e.g. "full_moon"
     const moonIcon = `mdi:moon-${phase.replace(/_/g, '-').replace(/-moon$/, '')}`;
-    const name = stateObj.attributes?.friendly_name || 'Mond';
-    const phaseLabel = phase.replace(/_/g, ' ');
+
+    const phaseLabels: Record<string, string> = {
+      'new_moon': 'NM',
+      'waxing_crescent': '+Sich',
+      'first_quarter': '+HM',
+      'waxing_gibbous': '+3/4',
+      'full_moon': 'VM',
+      'waning_gibbous': '-3/4',
+      'last_quarter': '-HM',
+      'waning_crescent': '-Sich',
+    };
+    const label = phaseLabels[phase] || phase.replace(/_/g, ' ');
 
     return html`
-      <div class="info-item detail-with-name">
+      <div class="info-item">
         <span class="info-icon"><ha-icon icon="${moonIcon}"></ha-icon></span>
-        <span class="detail-text">
-          <span class="detail-name">${name}</span>
-          <span class="detail-value">${phaseLabel}</span>
-        </span>
+        <span>${label}</span>
       </div>
     `;
   }
