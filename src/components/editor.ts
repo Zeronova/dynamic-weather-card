@@ -25,7 +25,7 @@ export class DynamicWeatherCardEditor extends LitElement {
       (entities as Array<{ entity: string; name?: string }>).forEach((e, i) => {
         if (i < 3 && e?.entity) {
           flat[`custom_entity_${i + 1}`] = e.entity;
-          if (e.name) flat[`custom_entity_name_${i + 1}`] = e.name;
+          if (e.name) flat[`custom_entity_${i + 1}_name`] = e.name;
         }
       });
     }

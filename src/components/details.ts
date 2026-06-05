@@ -41,6 +41,31 @@ export class WeatherDetails extends LitElement {
       white-space: nowrap;
     }
 
+    .info-item.detail-with-name {
+      display: flex;
+      align-items: flex-start;
+      gap: 3px;
+    }
+
+    .info-item.detail-with-name .detail-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .detail-text .detail-name {
+      font-size: 0.8em;
+      opacity: 0.7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80px;
+    }
+
+    .detail-text .detail-value {
+      white-space: nowrap;
+    }
+
     .info-icon {
       font-size: 16px;
       width: 20px;
@@ -198,12 +223,13 @@ export class WeatherDetails extends LitElement {
     `;
   }
 
-  private renderIcon(icon: string | null): TemplateResult {
-    if (!icon) return getSVGIcon('humidity') as TemplateResult;
-    if (icon.startsWith('mdi:')) {
-      return html`<ha-icon icon="${icon}"></ha-icon>`;
+  private renderIcon(icon: string | null, fallbackIcon?: string): TemplateResult {
+    const resolvedIcon = icon || fallbackIcon || '';
+    if (!resolvedIcon) return getSVGIcon('humidity') as TemplateResult;
+    if (resolvedIcon.startsWith('mdi:')) {
+      return html`<ha-icon icon="${resolvedIcon}"></ha-icon>`;
     }
-    const svg = getSVGIcon(icon);
+    const svg = getSVGIcon(resolvedIcon);
     if (typeof svg !== 'string') return svg;
     return getSVGIcon('humidity') as TemplateResult;
   }
@@ -217,11 +243,15 @@ export class WeatherDetails extends LitElement {
     const name = stateObj.attributes?.friendly_name || this.config.detailEntity;
     const value = stateObj.state;
     const unit = stateObj.attributes?.unit_of_measurement || '';
+    const entityIcon = stateObj.attributes?.icon || '';
 
     return html`
-      <div class="info-item">
-        <span class="info-icon">${this.renderIcon(this.config.detailEntityIcon)}</span>
-        <span>${value}${unit ? ' ' + unit : ''}</span>
+      <div class="info-item detail-with-name">
+        <span class="info-icon">${this.renderIcon(this.config.detailEntityIcon, entityIcon)}</span>
+        <span class="detail-text">
+          <span class="detail-name">${name}</span>
+          <span class="detail-value">${value}${unit ? ' ' + unit : ''}</span>
+        </span>
       </div>
     `;
   }
@@ -235,11 +265,15 @@ export class WeatherDetails extends LitElement {
     const name = stateObj.attributes?.friendly_name || this.config.detailEntity2;
     const value = stateObj.state;
     const unit = stateObj.attributes?.unit_of_measurement || '';
+    const entityIcon = stateObj.attributes?.icon || '';
 
     return html`
-      <div class="info-item">
-        <span class="info-icon">${this.renderIcon(this.config.detailEntity2Icon)}</span>
-        <span>${value}${unit ? ' ' + unit : ''}</span>
+      <div class="info-item detail-with-name">
+        <span class="info-icon">${this.renderIcon(this.config.detailEntity2Icon, entityIcon)}</span>
+        <span class="detail-text">
+          <span class="detail-name">${name}</span>
+          <span class="detail-value">${value}${unit ? ' ' + unit : ''}</span>
+        </span>
       </div>
     `;
   }
