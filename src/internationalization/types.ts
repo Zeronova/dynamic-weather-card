@@ -122,7 +122,9 @@ export interface EditorTranslations {
   custom_entity_2: string;
   custom_entity_3: string;
   detail_entity: string;
-  detail_entity_2: string;
+  detail_entity_icon: string;
+  show_moon: string;
+  moon_entity: string;
   time_background: string;
   time_background_description: string;
   language: string;

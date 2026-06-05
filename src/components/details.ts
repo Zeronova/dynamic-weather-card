@@ -94,7 +94,7 @@ export class WeatherDetails extends LitElement {
       (this.config.showSunrise && this.sunData?.sunrise != null) ||
       (this.config.showSunset && this.sunData?.sunset != null) ||
       (!!this.config.detailEntity && !!this.hass?.states[this.config.detailEntity]) ||
-      (!!this.config.detailEntity2 && !!this.hass?.states[this.config.detailEntity2])
+      (!!this.config.showMoon && !!this.config.moonEntity && !!this.hass?.states[this.config.moonEntity])
     );
   }
 
@@ -256,23 +256,23 @@ export class WeatherDetails extends LitElement {
     `;
   }
 
-  private renderDetailEntity2(): TemplateResult {
-    if (!this.config?.detailEntity2 || !this.hass) return html``;
+  private renderMoonPhase(): TemplateResult {
+    if (!this.config?.showMoon || !this.config?.moonEntity || !this.hass) return html``;
 
-    const stateObj = this.hass.states[this.config.detailEntity2];
+    const stateObj = this.hass.states[this.config.moonEntity];
     if (!stateObj || stateObj.state === 'unavailable' || stateObj.state === 'unknown') return html``;
 
-    const name = stateObj.attributes?.friendly_name || this.config.detailEntity2;
-    const value = stateObj.state;
-    const unit = stateObj.attributes?.unit_of_measurement || '';
-    const entityIcon = stateObj.attributes?.icon || '';
+    const phase = stateObj.state; // e.g. "full_moon"
+    const moonIcon = `mdi:moon-${phase.replace(/_/g, '-').replace(/-moon$/, '')}`;
+    const name = stateObj.attributes?.friendly_name || 'Mond';
+    const phaseLabel = phase.replace(/_/g, ' ');
 
     return html`
       <div class="info-item detail-with-name">
-        <span class="info-icon">${this.renderIcon(this.config.detailEntity2Icon, entityIcon)}</span>
+        <span class="info-icon"><ha-icon icon="${moonIcon}"></ha-icon></span>
         <span class="detail-text">
           <span class="detail-name">${name}</span>
-          <span class="detail-value">${value}${unit ? ' ' + unit : ''}</span>
+          <span class="detail-value">${phaseLabel}</span>
         </span>
       </div>
     `;
@@ -288,11 +288,11 @@ export class WeatherDetails extends LitElement {
         ${this.renderPrecipitation()}
         ${this.renderWind()}
         ${this.renderWindDirection()}
-        <!-- Row 2: Sunrise, Sunset, Detail Entity 1, Detail Entity 2 -->
+        <!-- Row 2: Sunrise, Sunset, Detail Entity, Moon Phase -->
         ${this.renderSunrise()}
         ${this.renderSunset()}
         ${this.renderDetailEntity()}
-        ${this.renderDetailEntity2()}
+        ${this.renderMoonPhase()}
       </div>
     `;
   }

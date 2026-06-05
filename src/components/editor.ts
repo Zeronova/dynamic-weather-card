@@ -38,8 +38,6 @@ export class DynamicWeatherCardEditor extends LitElement {
     // Extract detail entity icons
     const detailEntityIcon = (config as Record<string, unknown>).detail_entity_icon || (config as Record<string, unknown>).detailEntityIcon;
     if (detailEntityIcon) flat.detail_entity_icon = detailEntityIcon as string;
-    const detailEntity2Icon = (config as Record<string, unknown>).detail_entity_2_icon || (config as Record<string, unknown>).detailEntity2Icon;
-    if (detailEntity2Icon) flat.detail_entity_2_icon = detailEntity2Icon as string;
 
     this._config = {
       name: '',
@@ -78,9 +76,9 @@ export class DynamicWeatherCardEditor extends LitElement {
       custom_entity_3: '',
       custom_entity_3_name: '',
       detail_entity: '',
-      detail_entity_2: '',
       detail_entity_icon: '',
-      detail_entity_2_icon: '',
+      show_moon: DEFAULT_CONFIG.showMoon,
+      moon_entity: DEFAULT_CONFIG.moonEntity,
       ...config,
       ...flat
     };
@@ -158,16 +156,16 @@ export class DynamicWeatherCardEditor extends LitElement {
       },
       { name: 'overlay_opacity', selector: { number: { min: 0, max: 1, step: 0.05, mode: 'box' } } },
       { name: 'font_size', selector: { number: { min: 8, max: 30, step: 1, mode: 'box' } } },
-      { name: 'custom_entity_1', selector: { entity: { domain: 'sensor' } } },
+      { name: 'custom_entity_1', selector: { entity: { domain: 'sensor', device_class: ['temperature'] } } },
       { name: 'custom_entity_1_name', selector: { text: {} } },
-      { name: 'custom_entity_2', selector: { entity: { domain: 'sensor' } } },
+      { name: 'custom_entity_2', selector: { entity: { domain: 'sensor', device_class: ['temperature'] } } },
       { name: 'custom_entity_2_name', selector: { text: {} } },
-      { name: 'custom_entity_3', selector: { entity: { domain: 'sensor' } } },
+      { name: 'custom_entity_3', selector: { entity: { domain: 'sensor', device_class: ['temperature'] } } },
       { name: 'custom_entity_3_name', selector: { text: {} } },
       { name: 'detail_entity', selector: { entity: {} } },
       { name: 'detail_entity_icon', selector: { icon_picker: {} } },
-      { name: 'detail_entity_2', selector: { entity: {} } },
-      { name: 'detail_entity_2_icon', selector: { icon_picker: {} } },
+      { name: 'show_moon', selector: { boolean: {} } },
+      { name: 'moon_entity', selector: { entity: { domain: 'sensor' } } },
       {
         name: 'language',
         selector: {
@@ -230,9 +228,6 @@ export class DynamicWeatherCardEditor extends LitElement {
     // Convert flat detail_entity_icon fields
     if (value.detail_entity_icon) {
       value.detail_entity_icon = value.detail_entity_icon;
-    }
-    if (value.detail_entity_2_icon) {
-      value.detail_entity_2_icon = value.detail_entity_2_icon;
     }
 
     this._config = value;

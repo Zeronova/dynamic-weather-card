@@ -170,9 +170,9 @@ export class AnimatedWeatherCard extends LitElement {
       clockFormat: this.config.clockFormat ?? '24h',
       windSpeedUnit: this.config.windSpeedUnit ?? 'ms',
       detailEntity: this.config.detailEntity || null,
-      detailEntity2: this.config.detailEntity2 || null,
       detailEntityIcon: this.config.detailEntityIcon || null,
-      detailEntity2Icon: this.config.detailEntity2Icon || null,
+      showMoon: this.config.showMoon ?? false,
+      moonEntity: this.config.moonEntity || null,
       precipitationEntity: this.config.precipitationEntity || null
     };
   }
@@ -246,9 +246,9 @@ export class AnimatedWeatherCard extends LitElement {
       sunsetEntity: config.sunset_entity || null,
       templowAttribute: config.templow_attribute || null,
       detailEntity: config.detail_entity || '',
-      detailEntity2: config.detail_entity_2 || '',
       detailEntityIcon: config.detail_entity_icon || (config as any).detailEntityIcon || '',
-      detailEntity2Icon: config.detail_entity_2_icon || (config as any).detailEntity2Icon || '',
+      showMoon: config.show_moon !== false,
+      moonEntity: config.moon_entity || DEFAULT_CONFIG.moonEntity,
       precipitationEntity: config.precipitation_entity || '',
       tapAction: config.tap_action || { action: 'more-info' },
       holdAction: config.hold_action || { action: 'none' },

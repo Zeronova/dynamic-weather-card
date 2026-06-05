@@ -53,9 +53,9 @@ export const DEFAULT_CONFIG: Required<Omit<WeatherCardConfig, 'entity' | 'type'>
   fontSize: 13,
   customEntities: [],
   detailEntity: '',
-  detailEntity2: '',
   detailEntityIcon: '',
-  detailEntity2Icon: '',
+  showMoon: false,
+  moonEntity: 'sensor.moon_phase',
   precipitationEntity: '',
   timeBackground: []
 };

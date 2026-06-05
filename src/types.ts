@@ -145,9 +145,9 @@ export interface WeatherCardConfig {
   timeBackground?: TimeBackgroundSegment[];
   customEntities?: CustomEntity[];
   detailEntity?: string;
-  detailEntity2?: string;
   detailEntityIcon?: string;
-  detailEntity2Icon?: string;
+  showMoon?: boolean;
+  moonEntity?: string;
   precipitationEntity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   height?: number | null;
@@ -261,9 +261,9 @@ export interface ConfigInput {
   time_background?: TimeBackgroundSegment[];
   custom_entities?: CustomEntity[];
   detail_entity?: string;
-  detail_entity_2?: string;
   detail_entity_icon?: string;
-  detail_entity_2_icon?: string;
+  show_moon?: boolean;
+  moon_entity?: string;
   precipitation_entity?: string;
   language?: 'auto' | 'en' | 'ru' | 'de' | 'nl' | 'fr' | 'es' | 'it' | 'sk' | 'hu';
   wind_speed_unit?: 'ms' | 'kmh';
@@ -283,9 +283,9 @@ export interface WeatherCardConfigInternal extends WeatherCardConfig {
   sunsetEntity?: string | null;
   templowAttribute?: string | null;
   detailEntity?: string;
-  detailEntity2?: string;
   detailEntityIcon?: string;
-  detailEntity2Icon?: string;
+  showMoon?: boolean;
+  moonEntity?: string;
   precipitationEntity?: string;
   tapAction?: ActionConfig;
   holdAction?: ActionConfig;
@@ -304,9 +304,9 @@ export interface DetailsConfig {
   clockFormat: '12h' | '24h';
   windSpeedUnit: 'ms' | 'kmh';
   detailEntity: string | null;
-  detailEntity2: string | null;
   detailEntityIcon: string | null;
-  detailEntity2Icon: string | null;
+  showMoon: boolean;
+  moonEntity: string | null;
   precipitationEntity: string | null;
 }
 
