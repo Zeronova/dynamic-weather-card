@@ -54,6 +54,7 @@ const translation: Translation = {
     'show_sunrise_sunset': 'Sonnenaufgang/Sonnenuntergang anzeigen',
     'sunrise_entity': 'Sonnenaufgang-Entität',
     'sunset_entity': 'Sonnenuntergang-Entität',
+    'show_animation': 'Hintergrund-Animation',
     'show_clock': 'Uhr anzeigen',
     'clock_position': 'Uhrposition',
     'clock_position_top': 'Oben',

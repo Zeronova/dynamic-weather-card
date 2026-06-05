@@ -132,6 +132,7 @@ export interface WeatherCardConfig {
   hourlyForecastHours?: number;
   dailyForecastDays?: number;
   showSunriseSunset?: boolean;
+  showAnimation?: boolean;
   showClock?: boolean;
   clockPosition?: 'top' | 'details';
   clockFormat?: '12h' | '24h';
@@ -248,6 +249,7 @@ export interface ConfigInput {
   hourly_forecast_hours?: number;
   daily_forecast_days?: number;
   show_sunrise_sunset?: boolean;
+  show_animation?: boolean;
   show_clock?: boolean;
   clock_position?: 'top' | 'details';
   clock_format?: '12h' | '24h';

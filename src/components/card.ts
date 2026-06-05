@@ -76,6 +76,7 @@ export class AnimatedWeatherCard extends LitElement {
     super.connectedCallback();
     this.updateComplete.then(() => {
       setTimeout(() => {
+        if (this.config.showAnimation === false) return;
         const container = this.shadowRoot?.querySelector('.canvas-container');
         if (container) {
           this.animationManager.setup(container);
@@ -100,6 +101,26 @@ export class AnimatedWeatherCard extends LitElement {
         this.subscribedEntity = entity;
         this.subscribedShowDaily = showDaily;
         this.forecastService.subscribe(this.hass, entity, showDaily);
+      }
+    }
+
+    if (changedProperties.has('config')) {
+      const oldConfig = changedProperties.get('config') as WeatherCardConfigInternal | undefined;
+      const wasAnimating = oldConfig?.showAnimation !== false;
+      const isAnimating = this.config.showAnimation !== false;
+      if (wasAnimating !== isAnimating) {
+        this.updateComplete.then(() => {
+          if (isAnimating) {
+            const container = this.shadowRoot?.querySelector('.canvas-container');
+            if (container) {
+              this.animationManager.setup(container);
+            }
+          } else {
+            this.animationManager.destroy();
+            const canvas = this.shadowRoot?.querySelector('.canvas-container canvas');
+            if (canvas) canvas.remove();
+          }
+        });
       }
     }
 
@@ -210,6 +231,7 @@ export class AnimatedWeatherCard extends LitElement {
       hourlyForecastHours: config.hourly_forecast_hours ?? DEFAULT_CONFIG.hourlyForecastHours,
       dailyForecastDays: config.daily_forecast_days ?? DEFAULT_CONFIG.dailyForecastDays,
       showSunriseSunset: config.show_sunrise_sunset !== false,
+      showAnimation: config.show_animation !== false,
       showClock: config.show_clock === true,
       clockPosition: config.clock_position || DEFAULT_CONFIG.clockPosition,
       clockFormat: config.clock_format || DEFAULT_CONFIG.clockFormat,
@@ -316,8 +338,10 @@ export class AnimatedWeatherCard extends LitElement {
         @pointerup=${(e: PointerEvent) => this.actionHandler.handlePointerUp(e)}
         @pointercancel=${(e: PointerEvent) => this.actionHandler.handlePointerUp(e)}
       >
-        <div class="${cardClasses}" style="min-height: ${minHeight}; ${bgStyle}; ${overlayStyle} cursor: pointer;">
-          <div class="canvas-container"></div>
+          <div class="${cardClasses}" style="min-height: ${minHeight}; ${bgStyle}; ${overlayStyle} cursor: pointer;">
+          ${this.config.showAnimation !== false ? html`
+            <div class="canvas-container"></div>
+          ` : ''}
           <div class="content">
             ${this.config.name && this.config.name.trim() !== '' ? html`
               <div class="header">
